@@ -1,0 +1,48 @@
+version: 2.1
+orbs:
+  cypress: cypress-io/cypress@1.29.0
+
+executors:
+  with-chrome-and-firefox:
+    docker:
+      - image: 'cypress/browsers:node16.5.0-chrome97-ff96'
+      environment:
+        CYPRESS_viewport: macbook-15
+        CYPRESS_takeScreenshots: true
+        CYPRESS_RECORD_KEY: bcc83a31-a9da-4c87-98e9-f023d062e90d
+        CYPRESS_RETRIES: 3
+      resource_class: small
+
+commands:
+  slack-reporter:
+    steps:
+      - run:
+          name: Slack - Setting Failure Condition
+          command: |
+            echo 'export SLACK_BUILD_STATUS="fail"' >> $BASH_ENV
+          when: on_fail
+      - run:
+          name: Slack - Setting Success Condition
+          command: |
+            echo 'export SLACK_BUILD_STATUS="success"' >> $BASH_ENV
+          when: on_success
+      - run:
+          name: Slack - Sending Status Alert
+          shell: /bin/bash
+          when: always
+          command: ./.circleci/utilities/send_build_status_to_slack.sh
+          no_output_timeout: 15m
+
+qa-workflow: &qa-workflow
+  jobs:
+    - cypress/run:
+        name: "MarketingQA Publish_Site Tests"
+        browser: chrome
+        spec: cypress/integration/*
+        executor: with-chrome-and-firefox
+        post-steps:
+          - slack-reporter
+
+workflows:
+  qa:
+    <<: *qa-workflow
