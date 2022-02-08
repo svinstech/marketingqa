@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@1.29.0
+  cypress: cypress-io/cypress@1
 
 executors:
   with-chrome-and-firefox:
@@ -34,7 +34,11 @@ commands:
 
 qa-workflow: &qa-workflow
   jobs:
+    - cypress/install:
+        build: 'npm run build'
     - cypress/run:
+        requires:
+          - cypress/install
         name: "MarketingQA Publish_Site Tests"
         browser: chrome
         spec: cypress/integration/*
