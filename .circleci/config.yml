@@ -3,14 +3,14 @@ orbs:
   cypress: cypress-io/cypress@1
 
 executors:
-  with-chrome-and-firefox:
+  with-chrome:
     docker:
-      - image: cypress/browsers:node16.5.0-chrome97-ff96
-        environment:
-          CYPRESS_viewport: macbook-15
-          CYPRESS_takeScreenshots: true
-          CYPRESS_RECORD_KEY: bcc83a31-a9da-4c87-98e9-f023d062e90d
-          CYPRESS_RETRIES: 3
+      - image: 'cypress/browsers:node16.5.0-chrome97-ff96'
+#        environment:
+#          CYPRESS_viewport: macbook-15
+#          CYPRESS_takeScreenshots: true
+#          CYPRESS_RECORD_KEY: bcc83a31-a9da-4c87-98e9-f023d062e90d
+#          CYPRESS_RETRIES: 3
 
 commands:
   slack-reporter:
@@ -34,15 +34,14 @@ commands:
 
 qa-workflow: &qa-workflow
   jobs:
-    - cypress/install:
-        yarn: true
+#    - cypress/install:
     - cypress/run:
-        requires:
-          - cypress/install
+#        requires:
+#          - cypress/install
         name: "MarketingQA Publish_Site Tests"
+        executor: with-chrome
         browser: chrome
         spec: cypress/integration/*
-        executor: with-chrome-and-firefox
         yarn: true
         post-steps:
           - slack-reporter
