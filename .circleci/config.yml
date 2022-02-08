@@ -39,9 +39,10 @@ qa-workflow: &qa-workflow
 #        requires:
 #          - cypress/install
         name: "MarketingQA Publish_Site Tests"
-        executor: with-chrome
-        browser: chrome
+#        executor: with-chrome
+#        browser: chrome
         spec: cypress/integration/*
+        no-workspace: true
         yarn: true
         post-steps:
           - slack-reporter
