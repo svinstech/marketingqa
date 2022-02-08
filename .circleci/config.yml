@@ -35,7 +35,7 @@ commands:
 qa-workflow: &qa-workflow
   jobs:
     - cypress/install:
-        build: 'npm run build'
+        yarn: true
     - cypress/run:
         requires:
           - cypress/install
