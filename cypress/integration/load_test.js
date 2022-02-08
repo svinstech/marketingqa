@@ -1,4 +1,4 @@
-import urls from './url.json'
+import urls from "./url.json";
 
 const baseUrl = `https://www.vouch.us`
 

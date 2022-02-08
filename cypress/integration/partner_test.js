@@ -1,10 +1,9 @@
-import urls from './url_partner.json'
-const baseUrl = `https://www.vouch.us/partners`
+import urls from "./url_partner.json";
 
 describe('Test Broken Links', () => {
    
     describe('visits all the partner pages and tests for broken links', () =>{
-     
+
         const pages = Object.values(urls);
         for (let i = 0; i < pages.length; i++){
             let company = `${pages[i]}`
