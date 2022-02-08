@@ -11,7 +11,6 @@ executors:
           CYPRESS_takeScreenshots: true
           CYPRESS_RECORD_KEY: bcc83a31-a9da-4c87-98e9-f023d062e90d
           CYPRESS_RETRIES: 3
-    resource_class: small
 
 commands:
   slack-reporter:
@@ -40,6 +39,7 @@ qa-workflow: &qa-workflow
         browser: chrome
         spec: cypress/integration/*
         executor: with-chrome-and-firefox
+        yarn: true
         post-steps:
           - slack-reporter
 
