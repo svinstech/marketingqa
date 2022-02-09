@@ -1,4 +1,6 @@
-import urls from "./url_partner.json";
+import urls from "../configs/url_partner.json";
+
+const baseUrl = Cypress.config('baseUrl')
 
 describe('Test Broken Links', () => {
    
@@ -10,9 +12,9 @@ describe('Test Broken Links', () => {
             company = company.split("/");
             company = company[company.length - 1];
             it("Checking Partner " + company, () => {
-                cy.visit(`${baseUrl}${pages[i]}`)
-                cy.on('window:confirm', cy.stub().as('confirm'))
-                Cypress.on('uncaught:exception', (err, runnable) => {
+                cy.visit(`${baseUrl}/partners/${pages[i]}`)
+                // cy.on('window:confirm', cy.stub().as('confirm'))
+                Cypress.on('uncaught:exception', () => {
                     // returning false here prevents Cypress from
                     // failing the test
                     return false

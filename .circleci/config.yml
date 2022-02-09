@@ -41,7 +41,7 @@ qa-workflow: &qa-workflow
         name: "MarketingQA Publish_Site Tests"
 #        executor: with-chrome
 #        browser: chrome
-        spec: cypress/integration/*
+        spec: ./cypress/integration/*
         no-workspace: true
         yarn: true
         post-steps:
