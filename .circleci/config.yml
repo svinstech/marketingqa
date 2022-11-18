@@ -44,8 +44,8 @@ qa-workflow: &qa-workflow
         spec: ./cypress/integration/*
         no-workspace: true
         yarn: true
-        post-steps:
-          - slack-reporter
+        # post-steps:
+        #   - slack-reporter
 
 workflows:
   qa:
