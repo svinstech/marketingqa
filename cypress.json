@@ -1,9 +1,0 @@
-{
-    "projectId": "gwph8y",
-    "waitForAnimations": true,
-    "watchForFileChanges": false,
-    "chromeWebSecurity": false,
-    "defaultCommandTimeout": 60000,
-    "integrationFolder": "./cypress/integration/",
-    "baseUrl": "https://www.vouch.us"
-}

@@ -1,11 +1,15 @@
 import urls from "../configs/url.json";
 const baseUrl = Cypress.config('baseUrl')
 
+/*
+Tests out all the vouch pages listed in url.json.
+*/
+
 describe('Test Broken Links', () => {
     describe('visits all the vouch static pages and tests for broken links', () => {
         const pages = Object.values(urls);
-        for (let i = 0; i < pages.length; i++){
-            let url = `${baseUrl}${pages[i]}`
+        for (let i = 0; i < 3/*pages.length*/; i++){ // Testing a small number of links to avoid hitting the vouch site hundreds of times.
+            const url = `${baseUrl}${pages[i]}`
             it("Checking " + url, () => {
                 cy.visit(url)
                 // cy.on('window:confirm', cy.stub().as('confirm'))
@@ -15,7 +19,7 @@ describe('Test Broken Links', () => {
                     return false
                 })
 
-                cy.wrap('passed').as('ctrl')
+                cy.wrap('passed').as('ctrl') // Question from Kellen - What is happening here?
                 cy.get("a:not([href*='mailto:]'])").each($el => {
                     if ($el.prop('href').length > 0) {
                         const message = $el.text()

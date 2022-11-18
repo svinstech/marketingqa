@@ -7,7 +7,7 @@ describe('Test Broken Links', () => {
     describe('visits all the partner pages and tests for broken links', () =>{
 
         const pages = Object.values(urls);
-        for (let i = 0; i < pages.length; i++){
+        for (let i = 0; i < 3/*pages.length*/; i++){ // Testing a small number of links to avoid hitting the vouch site hundreds of times.
             let company = `${pages[i]}`
             company = company.split("/");
             company = company[company.length - 1];

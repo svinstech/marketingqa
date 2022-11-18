@@ -75,6 +75,7 @@ SLACK_UID="$(./.circleci/utilities/github_username_to_slack_uid.sh ${ORIGINATING
 SLACK_MENTIONS="<${SLACK_UID}>"
 echo "SLACK_MENTIONS: ${SLACK_MENTIONS}"
 
+# IS THIS LEGACY CODE? I DONT SEE EVIDENCE THAT MOCHA IS BEING USED ELSEWHERE. (Kellen)
 # create failure message from mocha output
 TMP_MSG=""
 if [[ "${SLACK_BUILD_STATUS}" = "fail" ]]; then
