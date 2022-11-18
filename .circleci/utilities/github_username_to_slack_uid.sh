@@ -29,6 +29,10 @@ case "${1}" in
     printf "@UHWLEPE64"
     ;;
 
+  KellenKincaid)
+    printf "@U041LQ819EK"
+    ;;
+
   kongovi)
     printf "@UJJ9J2EFJ"
     ;;
