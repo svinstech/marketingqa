@@ -1,16 +1,16 @@
 import urls from "../configs/url.json";
-import arrayShuffle from "array-shuffle";
+const shuffle = require('shuffle-array');
 
 const baseUrl = Cypress.config('baseUrl');
 
 describe('Test Broken Links', () => {
     describe('visits a subset of the vouch static pages and tests for broken links', () => {
         const pages = Object.values(urls);
-        const shuffledPages = arrayShuffle(pages); // Shuffle to ensure that a different set of links are checked every time.
         const linkSampleSize = 5;
+        const pagesSample = shuffle.pick(pages, { 'picks': Math.min(linkSampleSize, pages.length) });
 
-        for (let i = 0; i < linkSampleSize; i++){ // Testing a small number of links to avoid hitting the vouch site hundreds of times.
-            const url = `${baseUrl}${shuffledPages[i]}`
+        for (let i = 0; i < linkSampleSize; i++){
+            const url = `${baseUrl}${pagesSample[i]}`
             it("Checking " + url, () => {
                 cy.visit(url)
                 // cy.on('window:confirm', cy.stub().as('confirm'))
