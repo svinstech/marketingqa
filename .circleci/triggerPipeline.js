@@ -9,7 +9,7 @@
 */
 
 /*
-const token = "c41676c4a11eb837315c0ea638d9d9e79d984957";
+const token = "<your_personal_access_token>"; // <- TODO
 const branch = "QA-10-cypress_automation";
 const project_slug = "gh/svinstech/marketingqa";
 TriggerCircleCiPipeline(token, branch, project_slug);
