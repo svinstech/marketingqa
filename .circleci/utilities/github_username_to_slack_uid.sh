@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# We can the user ids from the api
+# We can get the user ids from the api
 # https://slack.com/api/users.list?token=SLACK_TOKEN
 # OR we can get the user id by going to https://svinsurance.slack.com/stats#members
 # and clicking the user whose slack user id we're looking for. When you click on that user,
@@ -8,64 +8,64 @@
 # or in various other ways as noted here
 # https://api.slack.com/reference/surfaces/formatting#mentioning-users
 
-case "${1}" in 
-  atomanyih)
+case $1 in 
+  "atomanyih")
     printf "@USXNZFNFP"
     ;;
 
-  bewatts)
+  "bewatts")
     printf "@UHHPHLN5S"
     ;;
 
-  dhylbert)
+  "dhylbert")
     printf "@UR70HLLMB"
     ;;
 
-  evanroman)
+  "evanroman")
     printf "@UDPSAK2BF"
     ;;
 
-  jeremyjpark)
+  "jeremyjpark")
     printf "@UHWLEPE64"
     ;;
 
-  KellenKincaid)
+  "KellenKincaid")
     printf "@U041LQ819EK"
     ;;
 
-  kongovi)
+  "kongovi")
     printf "@UJJ9J2EFJ"
     ;;
 
-  LeahHeadd)
+  "LeahHeadd")
     printf "@UMUHD6HAA"
     ;;
 
-  Mongey)
+  "Mongey")
     printf "@UGSQS5G64"
     ;;
 
-  nkeyes)
+  "nkeyes")
     printf "@UQSE6M1CY"
     ;;
 
-  pfriedman)
+  "pfriedman")
     printf "@UHY0T276E"
     ;;
 
-  stupakov)
+  "stupakov")
     printf "@UKDTNC4ES"
     ;;
 
-  tonythomson)
+  "tonythomson")
     printf "@UQSU0AE75"
     ;;
 
-  tlhinman)
+  "tlhinman")
     printf "@ULQ063JQP"
     ;;
 
-  yuhunglin)
+  "yuhunglin")
     printf "@UE7KZ1P18"
     ;;
 
