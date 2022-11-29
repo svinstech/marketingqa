@@ -112,11 +112,17 @@ if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
   VOUCH_ICON=":vouch:"
 fi
 
+# testing
+echo "testing 1"
+
 # to whom to target message
 SLACK_NOTIFY="${ORIGINATING_DEVELOPER:-vouch_dev}"
 if [[ "${SLACK_BUILD_STATUS}" != "success" ]]; then
   SLACK_NOTIFY+=" ${SLACK_MENTIONS}"
 fi
+
+# testing
+echo "testing 2"
 
 # attempt to build url to the cypress run in the dashboard
 RUN_URL="https://dashboard.cypress.io/#/projects/iukrxp/runs"
@@ -141,11 +147,17 @@ MESSAGE="${VOUCH_ICON} marketingqa publish_site test ${SLACK_BUILD_STATUS}! <${R
 MESSAGE+="<${ORIGINATING_BUILD_URL}|${ORIGINATING_PROJECT_REPONAME:-marketingqa} job run> for git branch ${ORIGINATING_BRANCH}\n"
 ### MESSAGE+="(<${COMMIT_URL:-unset}|${SHORT_SHA1}> by ${SLACK_NOTIFY}) ${SHORT_GIT_MESSAGE}\n"
 
+# testing
+echo "testing 3"
+
 # and add PR to message if available
 if [[ ! -z "${ORIGINATING_PULL_REQUEST}" ]]; then
   PR_NUM=$(echo "${ORIGINATING_PULL_REQUEST}" | awk -F/ '{print $NF}')
   MESSAGE+="<${ORIGINATING_PULL_REQUEST}|${ORIGINATING_PROJECT_REPONAME} pull request #${PR_NUM}>"
 fi
+
+# testing
+echo "testing 4"
 
 # cannot use orb in version 2.0 so cargo culting the slack code for slack/status
 # https://github.com/CircleCI-Public/slack-orb/blob/staging/src/commands/status.yml
