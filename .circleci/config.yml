@@ -15,6 +15,8 @@ executors:
 commands:
   slack-reporter:
     steps:
+      - env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_LINK_CHECKER_INCOMING_WEBHOOK }}
       - run:
           name: Slack - Setting Failure Condition
           command: |
@@ -25,8 +27,6 @@ commands:
           command: |
             echo 'export SLACK_BUILD_STATUS="success"' >> $BASH_ENV
           when: on_success
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_LINK_CHECKER_INCOMING_WEBHOOK }}
       - run:
           name: Slack - Sending Status Alert
           shell: /bin/bash
