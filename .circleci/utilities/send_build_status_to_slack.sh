@@ -162,6 +162,9 @@ echo "testing 4"
 # cannot use orb in version 2.0 so cargo culting the slack code for slack/status
 # https://github.com/CircleCI-Public/slack-orb/blob/staging/src/commands/status.yml
 if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
+  # testing
+  echo "testing 5"
+
   curl -X POST -H 'Content-type: application/json' \
     --data "{ \
               \"channel\": \"#tech-ci\", \
@@ -178,6 +181,9 @@ if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
   echo "Job completed successfully. Alert sent."
 
 elif [[ "${SLACK_BUILD_STATUS}" != "success" && ${ORIGINATING_BRANCH} != "master" && "${SLACK_UID}" != "!here" ]]; then
+   # testing
+  echo "testing 6"
+
   FAILURE_MESSAGE_CHANNEL="${SLACK_UID}"
   curl -X POST -H 'Content-type: application/json' \
     --data "{ \
