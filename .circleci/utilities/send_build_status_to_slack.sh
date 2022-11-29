@@ -6,6 +6,9 @@ set -o errexit
 # Use the error status of the first failure, rather than that of the last item in a pipeline.
 set -o pipefail
 
+SLACK_SUCCESS_WEBHOOK = "https://hooks.slack.com/services/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"
+SLACK_FAILURE_WEBHOOK = "https://hooks.slack.com/services/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"
+
 echo "CIRCLE_PROJECT_REPONAME: ${CIRCLE_PROJECT_REPONAME}"
 echo "CIRCLE_BUILD_NUM: ${CIRCLE_BUILD_NUM}"
 echo "CIRCLE_BUILD_URL: ${CIRCLE_BUILD_URL}"
