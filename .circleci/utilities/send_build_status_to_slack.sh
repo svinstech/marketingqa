@@ -61,10 +61,11 @@ if [[ ! -z "${ORIGINATING_SHA1}" ]]; then
 
   SHORT_SHA1=$(echo ${ORIGINATING_SHA1} | cut -c 1-7)
 
+####### COMMENTED OUT BECAUSE jq WAS NOT RECOGNIZED AND CAUSED AN ERROR.
   # get the git commit message for the originating sha1
-  GIT_COMMIT_MESSAGE=$(curl -H "Authorization: token ${GITHUB_API_TOKEN}" https://api.github.com/repos/${ORIGINATING_PROJECT_USERNAME}/${ORIGINATING_PROJECT_REPONAME}/git/commits/${ORIGINATING_SHA1} | jq '.message')
+  ### GIT_COMMIT_MESSAGE=$(curl -H "Authorization: token ${GITHUB_API_TOKEN}" https://api.github.com/repos/${ORIGINATING_PROJECT_USERNAME}/${ORIGINATING_PROJECT_REPONAME}/git/commits/${ORIGINATING_SHA1} | jq '.message')
   # get first line of the commit message and remove the quotes
-  SHORT_GIT_MESSAGE=$(echo -e ${GIT_COMMIT_MESSAGE} | head -n 1 | awk '{ gsub("\"", "") ; print $0 }')
+  ### SHORT_GIT_MESSAGE=$(echo -e ${GIT_COMMIT_MESSAGE} | head -n 1 | awk '{ gsub("\"", "") ; print $0 }')
 fi
 
 # notify slack user directly
@@ -136,7 +137,7 @@ done < "${input}"
 # build the message content
 MESSAGE="${VOUCH_ICON} marketingqa publish_site test ${SLACK_BUILD_STATUS}! <${RUN_URL}|Cypress Dashboard> | <${CIRCLE_BUILD_URL}|CircleCI Job>\n"
 MESSAGE+="<${ORIGINATING_BUILD_URL}|${ORIGINATING_PROJECT_REPONAME:-marketingqa} job run> for git branch ${ORIGINATING_BRANCH}\n"
-MESSAGE+="(<${COMMIT_URL:-unset}|${SHORT_SHA1}> by ${SLACK_NOTIFY}) ${SHORT_GIT_MESSAGE}\n"
+### MESSAGE+="(<${COMMIT_URL:-unset}|${SHORT_SHA1}> by ${SLACK_NOTIFY}) ${SHORT_GIT_MESSAGE}\n"
 
 # and add PR to message if available
 if [[ ! -z "${ORIGINATING_PULL_REQUEST}" ]]; then
