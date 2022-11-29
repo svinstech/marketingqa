@@ -121,18 +121,20 @@ fi
 # attempt to build url to the cypress run in the dashboard
 RUN_URL="https://dashboard.cypress.io/#/projects/iukrxp/runs"
 # from the output of the cypress run - cf. .circleci/config.yml
-input="./cypress_output.txt"
-while IFS= read -r line
-do
-  # find the line and remove the text we don't need
-  if [[ "${line}" == *"Recorded"*"iukrxp"* ]]; then
-    RUN_URL=$(echo "$line" | awk '{ gsub(/Recorded Run:| /, "") ; print $0 }')
-    # link to failures tab in case of failures
-    if [[ "${SLACK_BUILD_STATUS}" = "fail" ]]; then
-      RUN_URL+="/failures"
-    fi
-  fi
-done < "${input}"
+
+### COMMENTED OUT BECAUSE THIS FILE PATH CANT BE FOUND.
+# input="./cypress_output.txt"
+# while IFS= read -r line
+# do
+#   # find the line and remove the text we don't need
+#   if [[ "${line}" == *"Recorded"*"iukrxp"* ]]; then
+#     RUN_URL=$(echo "$line" | awk '{ gsub(/Recorded Run:| /, "") ; print $0 }')
+#     # link to failures tab in case of failures
+#     if [[ "${SLACK_BUILD_STATUS}" = "fail" ]]; then
+#       RUN_URL+="/failures"
+#     fi
+#   fi
+# done < "${input}"
 
 # build the message content
 MESSAGE="${VOUCH_ICON} marketingqa publish_site test ${SLACK_BUILD_STATUS}! <${RUN_URL}|Cypress Dashboard> | <${CIRCLE_BUILD_URL}|CircleCI Job>\n"
