@@ -166,15 +166,12 @@ if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
   echo "testing 5"
 
   curl -X POST -H 'Content-type: application/json' \
-    --data "{ \
-              \"channel\": \"#tech-ci\", \
-              \"title\": \"MarketingQA Publish_Site Test Results\", \
-              \"title_link\": \"https://circleci.com/gh/svinstech/workflows/marketingqa\", \
-              \"attachments\": [ \
+    --data "{ \"text\": \"<https://circleci.com/gh/svinstech/workflows/marketingqa|MarketingQA Publish_Site Test Results>\", \
+              \"blocks\": 
+              [ \
                 { \
-                  \"fallback\": \"marketingqa publish_site tests passed. https://dashboard.cypress.io/#/projects/iukrxp/runs\", \
-                  \"text\": \"${MESSAGE}\", \
-                  \"color\": \"#1CBF43\" \
+                  \"type\": \"mrkdwn\", \
+                  \"text\": \"<https://dashboard.cypress.io/#/projects/iukrxp/runs|marketingqa publish_site tests PASSED.>\n${MESSAGE}\" \
                 } \
               ] \
             } " ${SLACK_SUCCESS_WEBHOOK}
