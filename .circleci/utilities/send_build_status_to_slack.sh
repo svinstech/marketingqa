@@ -6,8 +6,9 @@ set -o errexit
 # Use the error status of the first failure, rather than that of the last item in a pipeline.
 set -o pipefail
 
-SLACK_SUCCESS_WEBHOOK="https://hooks.slack.com/services/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"
-SLACK_FAILURE_WEBHOOK="https://hooks.slack.com/services/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"
+SLACK_SUCCESS_WEBHOOK=$SLACK_WEBHOOK # Utilize Github secret in the marketingqa repo that has the Slack incoming webhook for the 'Vouch.us Link-Checker tests' app.
+SLACK_FAILURE_WEBHOOK=$SLACK_WEBHOOK # Utilize Github secret in the marketingqa repo that has the Slack incoming webhook for the 'Vouch.us Link-Checker tests' app.
+
 
 echo "CIRCLE_PROJECT_REPONAME: ${CIRCLE_PROJECT_REPONAME}"
 echo "CIRCLE_BUILD_NUM: ${CIRCLE_BUILD_NUM}"
