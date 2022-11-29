@@ -6,8 +6,6 @@ executors:
   with-chrome:
     docker:
       - image: 'cypress/browsers:node16.5.0-chrome97-ff96'
-        environment:
-          # SLACK_WEBHOOK: ${{ secrets.SLACK_LINK_CHECKER_INCOMING_WEBHOOK }}
 #          CYPRESS_viewport: macbook-15
 #          CYPRESS_takeScreenshots: true
 #          CYPRESS_RECORD_KEY: bcc83a31-a9da-4c87-98e9-f023d062e90d
@@ -28,11 +26,11 @@ commands:
           when: on_success
       - run:
           name: Slack - Sending Status Alert
+          env:
+            SLACK_WEBHOOK: ${{ secrets.SLACK_LINK_CHECKER_INCOMING_WEBHOOK }}
           shell: /bin/bash
           when: always
           command: |
-            echo 'export SLACK_WEBHOOK=$(cat secrets.SLACK_LINK_CHECKER_INCOMING_WEBHOOK)' >> "$BASH_ENV"
-            source "$BASH_ENV"
             ./.circleci/utilities/send_build_status_to_slack.sh
           no_output_timeout: 15m
 
