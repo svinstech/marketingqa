@@ -15,7 +15,7 @@ executors:
 commands:
   slack-reporter:
     steps:
-      - env:
+      env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_LINK_CHECKER_INCOMING_WEBHOOK }}
       - run:
           name: Slack - Setting Failure Condition
