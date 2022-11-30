@@ -193,7 +193,7 @@ if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
                   \"text\": \"<https://dashboard.cypress.io/#/projects/iukrxp/runs|marketingqa publish_site tests PASSED.>\n${MESSAGE}\" \
                 } \
               ] \
-            }" ${SLACK_SUCCESS_WEBHOOK}
+            }" "${SLACK_SUCCESS_WEBHOOK}"
   echo "Job completed successfully. Alert sent."
 
 elif [[ "${SLACK_BUILD_STATUS}" != "success" && ${ORIGINATING_BRANCH} != "master" && "${SLACK_UID}" != "!here" ]]; then
