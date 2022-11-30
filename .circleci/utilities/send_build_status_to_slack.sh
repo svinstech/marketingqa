@@ -204,17 +204,26 @@ elif [[ "${SLACK_BUILD_STATUS}" != "success" && ${ORIGINATING_BRANCH} != "master
   FAILURE_MESSAGE_CHANNEL="${SLACK_UID}"
   curl -X POST -H 'Content-type: application/json' \
     --data "{ \
-              \"channel\": \"${FAILURE_MESSAGE_CHANNEL}\", \
-              \"title\": \"MarketingQA Publish_Site Test Results\", \
-              \"title_link\": \"https://circleci.com/gh/svinstech/workflows/marketingqa\", \
-              \"attachments\": [ \
+              \"blocks\": \
+              [ \
                 { \
-                  \"fallback\": \"marketingqa publish_site tests failed. https://dashboard.cypress.io/#/projects/iukrxp/runs\", \
-                  \"text\": \"${MESSAGE}\", \
-                  \"color\": \"#ed5c5c\" \
+                  \"type\": \"header\", \
+                  \"text\": \
+                  { \
+                    \"type\": \"plain_text\", \
+                    \"text\": \"MarketingQA Publish_Site Test Results\" \
+                  } \
+                }, \
+                { \
+                  \"type\": \"section\", \
+                  \"text\": \
+                    { \
+                      \"type\": \"mrkdwn\", \
+                      \"text\": \"<https://dashboard.cypress.io/#/projects/iukrxp/runs|marketingqa publish_site tests FAILED.>\n${MESSAGE}\" \
+                    } \
                 } \
               ] \
-            } " ${SLACK_FAILURE_WEBHOOK}
+            }" "${SLACK_FAILURE_WEBHOOK}"
   echo "Job failed. Alert sent."
 else
   echo "Job failed. Alert not sent."
