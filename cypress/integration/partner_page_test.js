@@ -23,7 +23,7 @@ describe('Test Broken Links', () => {
                     return false
                 })
                 cy.get('[id=apply-button-test]').click()
-                cy.url().should('eq', `https://app.vouch.us/?partner=${company}BINGBONG`) // Remove 'BINGBONG' after testing the failure logic.
+                cy.url().should('eq', `https://app.vouch.us/?partner=${company}`)
             })
         }
     })

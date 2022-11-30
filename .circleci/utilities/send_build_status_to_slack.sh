@@ -142,7 +142,7 @@ RUN_URL="https://dashboard.cypress.io/#/projects/iukrxp/runs"
 # done < "${input}"
 
 # build the message content
-MESSAGE="${VOUCH_ICON} marketingqa publish_site test ${SLACK_BUILD_STATUS}! <${RUN_URL}|Cypress Dashboard> | <${CIRCLE_BUILD_URL}|CircleCI Job>\n"
+MESSAGE="${VOUCH_ICON} marketingqa publish_site test status: ${SLACK_BUILD_STATUS}! <${RUN_URL}|Cypress Dashboard> | <${CIRCLE_BUILD_URL}|CircleCI Job>\n"
 MESSAGE+="<${ORIGINATING_BUILD_URL}|${ORIGINATING_PROJECT_REPONAME:-marketingqa} job run> for git branch ${ORIGINATING_BRANCH}\n"
 ### MESSAGE+="(<${COMMIT_URL:-unset}|${SHORT_SHA1}> by ${SLACK_NOTIFY}) ${SHORT_GIT_MESSAGE}\n"
 
@@ -177,7 +177,7 @@ if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
                 } \
               ] \
             }" "${SLACK_SUCCESS_WEBHOOK}"
-  echo "Job completed successfully. Alert sent."
+  echo "\nJob completed successfully. Alert sent."
 
 elif [[ "${SLACK_BUILD_STATUS}" != "success" && ${ORIGINATING_BRANCH} != "master" && "${SLACK_UID}" != "!here" ]]; then
   FAILURE_MESSAGE_CHANNEL="${SLACK_UID}"
@@ -203,7 +203,7 @@ elif [[ "${SLACK_BUILD_STATUS}" != "success" && ${ORIGINATING_BRANCH} != "master
                 } \
               ] \
             }" "${SLACK_FAILURE_WEBHOOK}"
-  echo "Job failed. Alert sent."
+  echo "\nJob failed. Alert sent."
 else
-  echo "Job failed. Alert not sent."
+  echo "\nJob failed. Alert not sent."
 fi
