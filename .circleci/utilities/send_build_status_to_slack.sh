@@ -152,6 +152,7 @@ if [[ ! -z "${ORIGINATING_PULL_REQUEST}" ]]; then
   MESSAGE+="<${ORIGINATING_PULL_REQUEST}|${ORIGINATING_PROJECT_REPONAME} pull request #${PR_NUM}>"
 fi
 
+JOB_STATUS=""
 # cannot use orb in version 2.0 so cargo culting the slack code for slack/status
 # https://github.com/CircleCI-Public/slack-orb/blob/staging/src/commands/status.yml
 if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
@@ -177,7 +178,7 @@ if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
                 } \
               ] \
             }" "${SLACK_SUCCESS_WEBHOOK}"
-  echo "\nJob completed successfully. Alert sent."
+  JOB_STATUS="Job completed successfully. Alert sent."
 
 elif [[ "${SLACK_BUILD_STATUS}" != "success" && ${ORIGINATING_BRANCH} != "master" && "${SLACK_UID}" != "!here" ]]; then
   FAILURE_MESSAGE_CHANNEL="${SLACK_UID}"
@@ -203,7 +204,10 @@ elif [[ "${SLACK_BUILD_STATUS}" != "success" && ${ORIGINATING_BRANCH} != "master
                 } \
               ] \
             }" "${SLACK_FAILURE_WEBHOOK}"
-  echo "\nJob failed. Alert sent."
+  JOB_STATUS="Job failed. Alert sent."
 else
-  echo "\nJob failed. Alert not sent."
+  JOB_STATUS="Job failed. Alert not sent."
 fi
+
+echo "" # This is necessary because the status of the api request above was being put on the same line as the job status. Preprending the job status with \n didn't help.
+echo "${JOB_STATUS}"
