@@ -36,8 +36,6 @@ qa-workflow: &qa-workflow
   jobs:
 #    - cypress/install:
     - cypress/run:
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_LINK_CHECKER_INCOMING_WEBHOOK }}
 #        requires:
 #          - cypress/install
         name: "MarketingQA Publish_Site Tests"
