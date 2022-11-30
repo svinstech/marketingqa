@@ -172,15 +172,15 @@ if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
   echo "testing 5"
 
   curl -X POST -H 'Content-type: application/json' \
-    --data "{ 
-              \"blocks\": 
+    --data "{ \
+              \"blocks\": \
               [ \
                 { \
                   \"type\": \"header\", \
                   \"text\": \
                   { \
-                    \"type\": \"plain_text\",
-                    \"text\": \"MarketingQA Publish_Site Test Results\"
+                    \"type\": \"plain_text\", \
+                    \"text\": \"MarketingQA Publish_Site Test Results\" \
                   } \
                 }, \
                 { \
@@ -200,6 +200,8 @@ elif [[ "${SLACK_BUILD_STATUS}" != "success" && ${ORIGINATING_BRANCH} != "master
    # testing
   echo "testing 6"
 
+
+# TODO - UPDATE THIS PAYLOAD ONCE THE ABOVE ONE (FOR SUCCESSES) WORKS.
   FAILURE_MESSAGE_CHANNEL="${SLACK_UID}"
   curl -X POST -H 'Content-type: application/json' \
     --data "{ \
