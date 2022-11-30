@@ -190,7 +190,6 @@ if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
                       \"type\": \"mrkdwn\", \
                       \"text\": \"<https://dashboard.cypress.io/#/projects/iukrxp/runs|marketingqa publish_site tests PASSED.>\n${MESSAGE}\" \
                     } \
-                  \"text\": \"<https://dashboard.cypress.io/#/projects/iukrxp/runs|marketingqa publish_site tests PASSED.>\n${MESSAGE}\" \
                 } \
               ] \
             }" "${SLACK_SUCCESS_WEBHOOK}"
