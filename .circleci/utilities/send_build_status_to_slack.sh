@@ -172,11 +172,24 @@ if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
   echo "testing 5"
 
   curl -X POST -H 'Content-type: application/json' \
-    --data "{ \"text\": \"<https://circleci.com/gh/svinstech/workflows/marketingqa|MarketingQA Publish_Site Test Results>\", \
+    --data "{ 
               \"blocks\": 
               [ \
                 { \
-                  \"type\": \"mrkdwn\", \
+                  \"type\": \"header\", \
+                  \"text\": \
+                  { \
+                    \"type\": \"plain_text\",
+                    \"text\": \"MarketingQA Publish_Site Test Results\"
+                  } \
+                }, \
+                { \
+                  \"type\": \"section\", \
+                  \"text\": \
+                    { \
+                      \"type\": \"mrkdwn\", \
+                      \"text\": \"<https://dashboard.cypress.io/#/projects/iukrxp/runs|marketingqa publish_site tests PASSED.>\n${MESSAGE}\" \
+                    } \
                   \"text\": \"<https://dashboard.cypress.io/#/projects/iukrxp/runs|marketingqa publish_site tests PASSED.>\n${MESSAGE}\" \
                 } \
               ] \
