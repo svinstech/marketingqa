@@ -48,7 +48,6 @@ if [ -z "${ORIGINATING_PULL_REQUEST}" ]; then
   ORIGINATING_PULL_REQUEST="${CIRCLE_PULL_REQUEST}"
 fi
 
-# testing
 if [ -z "${SLACK_SUCCESS_WEBHOOK}" ]; then
   echo "!!! SLACK_SUCCESS_WEBHOOK not set."
 fi
@@ -118,17 +117,11 @@ if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
   VOUCH_ICON=":vouch:"
 fi
 
-# testing
-echo "testing 1"
-
 # to whom to target message
 SLACK_NOTIFY="${ORIGINATING_DEVELOPER:-vouch_dev}"
 if [[ "${SLACK_BUILD_STATUS}" != "success" ]]; then
   SLACK_NOTIFY+=" ${SLACK_MENTIONS}"
 fi
-
-# testing
-echo "testing 2"
 
 # attempt to build url to the cypress run in the dashboard
 RUN_URL="https://dashboard.cypress.io/#/projects/iukrxp/runs"
@@ -153,24 +146,15 @@ MESSAGE="${VOUCH_ICON} marketingqa publish_site test ${SLACK_BUILD_STATUS}! <${R
 MESSAGE+="<${ORIGINATING_BUILD_URL}|${ORIGINATING_PROJECT_REPONAME:-marketingqa} job run> for git branch ${ORIGINATING_BRANCH}\n"
 ### MESSAGE+="(<${COMMIT_URL:-unset}|${SHORT_SHA1}> by ${SLACK_NOTIFY}) ${SHORT_GIT_MESSAGE}\n"
 
-# testing
-echo "testing 3"
-
 # and add PR to message if available
 if [[ ! -z "${ORIGINATING_PULL_REQUEST}" ]]; then
   PR_NUM=$(echo "${ORIGINATING_PULL_REQUEST}" | awk -F/ '{print $NF}')
   MESSAGE+="<${ORIGINATING_PULL_REQUEST}|${ORIGINATING_PROJECT_REPONAME} pull request #${PR_NUM}>"
 fi
 
-# testing
-echo "testing 4"
-
 # cannot use orb in version 2.0 so cargo culting the slack code for slack/status
 # https://github.com/CircleCI-Public/slack-orb/blob/staging/src/commands/status.yml
 if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
-  # testing
-  echo "testing 5"
-
   curl -X POST -H 'Content-type: application/json' \
     --data "{ \
               \"blocks\": \
@@ -196,11 +180,6 @@ if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
   echo "Job completed successfully. Alert sent."
 
 elif [[ "${SLACK_BUILD_STATUS}" != "success" && ${ORIGINATING_BRANCH} != "master" && "${SLACK_UID}" != "!here" ]]; then
-   # testing
-  echo "testing 6"
-
-
-# TODO - UPDATE THIS PAYLOAD ONCE THE ABOVE ONE (FOR SUCCESSES) WORKS.
   FAILURE_MESSAGE_CHANNEL="${SLACK_UID}"
   curl -X POST -H 'Content-type: application/json' \
     --data "{ \
