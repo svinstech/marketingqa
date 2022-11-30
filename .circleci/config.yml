@@ -26,8 +26,6 @@ commands:
           when: on_success
       - run:
           name: Slack - Sending Status Alert
-          env:
-            SLACK_WEBHOOK: ${{ secrets.SLACK_LINK_CHECKER_INCOMING_WEBHOOK }}
           shell: /bin/bash
           when: always
           command: |
@@ -38,6 +36,8 @@ qa-workflow: &qa-workflow
   jobs:
 #    - cypress/install:
     - cypress/run:
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_LINK_CHECKER_INCOMING_WEBHOOK }}
 #        requires:
 #          - cypress/install
         name: "MarketingQA Publish_Site Tests"
