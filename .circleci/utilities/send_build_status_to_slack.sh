@@ -86,17 +86,17 @@ echo "SLACK_MENTIONS: ${SLACK_MENTIONS}"
 
 # IS THIS LEGACY CODE? I DONT SEE EVIDENCE THAT MOCHA IS BEING USED ELSEWHERE. (Kellen)
 # create failure message from mocha output
-TMP_MSG=""
-if [[ "${SLACK_BUILD_STATUS}" = "fail" ]]; then
-  for file in cypress/reports/mocha/*.json; do
-    ERR=$(cat ${file} | jq '.results | .[0] | .suites | .[0] | .tests | .[0] | .err | .message')
-    if [[ "${ERR}" != "null" ]]; then
-      TMP_MSG+="${ERR} "
-    fi
-  done
-fi
-FAILURE_MSG=$(echo -e ${TMP_MSG} | awk '{ gsub(/\"|\[|\]|,/, ""); print $0 }')
-echo "FAILURE_MSG: ${FAILURE_MSG}"
+# TMP_MSG=""
+# if [[ "${SLACK_BUILD_STATUS}" = "fail" ]]; then
+#   for file in cypress/reports/mocha/*.json; do
+#     ERR=$(cat ${file} | jq '.results | .[0] | .suites | .[0] | .tests | .[0] | .err | .message')
+#     if [[ "${ERR}" != "null" ]]; then
+#       TMP_MSG+="${ERR} "
+#     fi
+#   done
+# fi
+# FAILURE_MSG=$(echo -e ${TMP_MSG} | awk '{ gsub(/\"|\[|\]|,/, ""); print $0 }')
+# echo "FAILURE_MSG: ${FAILURE_MSG}"
 
 # TODO: determine why the FAILURE_MESSAGE is causing an invalid_payload
 # and then add the following back into the slack message
