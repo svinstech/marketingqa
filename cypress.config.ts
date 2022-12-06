@@ -7,7 +7,7 @@ module.exports = {
   e2e: {
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
-    setupNodeEvents(on, config) {
+    setupNodeEvents(on:any, config:any) {
       return require('./cypress/plugins/index.js')(on, config)
     },
     specPattern: './cypress/integration//**/*.{js,jsx,ts,tsx}',

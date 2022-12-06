@@ -1,16 +1,16 @@
 import urls from "../configs/url.json";
-const shuffle = require('shuffle-array');
+const shuffle :any = require('shuffle-array');
 
-const baseUrl = Cypress.config('baseUrl');
+const baseUrl :string|null = Cypress.config('baseUrl');
 
 describe('Test Broken Links', () => {
     describe('visits a subset of the vouch static pages and tests for broken links', () => {
-        const pages = Object.values(urls);
-        const linkSampleSize = 5;
-        const pagesSample = shuffle.pick(pages, { 'picks': Math.min(linkSampleSize, pages.length) });
+        const pages :string[] = Object.values(urls);
+        const linkSampleSize :number = 5;
+        const pagesSample :string[] = shuffle.pick(pages, { 'picks': Math.min(linkSampleSize, pages.length) });
 
         for (let i = 0; i < linkSampleSize; i++){
-            const url = `${baseUrl}${pagesSample[i]}`
+            const url :string = `${baseUrl}${pagesSample[i]}`
             it("Checking " + url, () => {
                 cy.visit(url)
                 // cy.on('window:confirm', cy.stub().as('confirm'))
@@ -23,7 +23,7 @@ describe('Test Broken Links', () => {
                 cy.wrap('passed').as('ctrl') // Question from Kellen - What is happening here?
                 cy.get("a:not([href*='mailto:]'])").each($el => {
                     if ($el.prop('href').length > 0) {
-                        const message = $el.text()
+                        const message :string = $el.text()
                         expect($el, message).to.have.attr("href").not.contain("undefined")
                     }
                 })
