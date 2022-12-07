@@ -6,7 +6,7 @@ module.exports = {
     chromeWebSecurity: false,
     defaultCommandTimeout: 60000,
     e2e: {
-        setupNodeEvents(on, config) {
+        setupNodeEvents(on:any, config:any) {
             return require('./cypress/plugins/index.js')(on, config);
         },
         specPattern: './cypress/integration//**/*.{js,jsx,ts,tsx}',
