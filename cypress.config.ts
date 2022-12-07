@@ -7,7 +7,7 @@ module.exports = {
     defaultCommandTimeout: 60000,
     e2e: {
         setupNodeEvents(on:any, config:any) {
-            return require('./cypress/dist/plugins/index.js')(on, config);
+            return require('./cypress/plugins/index.ts')(on, config);
         },
         specPattern: './cypress/integration//**/*.{js,jsx,ts,tsx}',
         baseUrl: 'https://www.vouch.us',
