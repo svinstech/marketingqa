@@ -1,10 +1,11 @@
-import urls from "../configs/url.json";
+import urls from "../configs/url_root.json";
 const shuffle :any = require('shuffle-array');
 
-const baseUrl :string|null = Cypress.config('baseUrl');
+const baseUrl :string|null = Cypress.config('baseUrl')
 
 describe('Test Broken Links', () => {
-    describe('visits a subset of the vouch static pages and tests for broken links', () => {
+   
+    describe('visits a subset of the root pages and tests for broken links', () =>{
         const pages :string[] = Object.values(urls);
         const linkSampleSize :number =  Math.min(5, pages.length);
 
@@ -17,25 +18,23 @@ describe('Test Broken Links', () => {
         if (!Array.isArray(pagesSample)) {
             pagesSample = [pagesSample];
         }
-        
+
         for (let i = 0; i < linkSampleSize; i++){
-            const url :string = `${baseUrl}${pagesSample[i]}`
-            it("Checking " + url, () => {
-                cy.visit(url)
+            const companyUrlSegment :string = `${pagesSample[i]}`
+            const companyUrlSegmentSplit :string[] = companyUrlSegment.split("/"); // ["", "companyUrlWithoutSlash"]
+            const companyUrlWithoutSlash :string = companyUrlSegmentSplit[companyUrlSegmentSplit.length - 1];
+
+            it("Checking root page: " + companyUrlWithoutSlash, () => {
+                cy.visit(`${baseUrl}/${companyUrlWithoutSlash}`)
+
                 // cy.on('window:confirm', cy.stub().as('confirm'))
                 Cypress.on('uncaught:exception', () => {
                     // returning false here prevents Cypress from
                     // failing the test
                     return false
                 })
-
-                cy.wrap('passed').as('ctrl') // Question from Kellen - What is happening here?
-                cy.get("a:not([href*='mailto:]'])").each($el => {
-                    if ($el.prop('href').length > 0) {
-                        const message :string = $el.text()
-                        expect($el, message).to.have.attr("href").not.contain("undefined")
-                    }
-                })
+                cy.contains('a','Get coverage Proposal').click()
+                cy.url().should('eq', `https://app.vouch.us/?partner=${companyUrlWithoutSlash}`)
             })
         }
     })
