@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@1
+  cypress: cypress-io/cypress@2.2.0
 
 executors:
   with-chrome:
@@ -20,7 +20,7 @@ commands:
           command: |
             echo 'export SLACK_BUILD_STATUS="success"' >> $BASH_ENV
           when: on_success
-      - runTryi:
+      - run:
           name: Slack - Sending Status Alert
           shell: /bin/bash
           when: always
