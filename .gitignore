@@ -33,3 +33,4 @@ yarn-error.log*
 /tmp/*
 !/tmp/.keep
 cypress/videos/*
+yarn.lock
