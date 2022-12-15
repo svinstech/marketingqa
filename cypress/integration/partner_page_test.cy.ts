@@ -33,7 +33,8 @@ describe('Test Broken Links', () => {
                     return false
                 })
                 cy.get('[id=apply-button-test]').click()
-                cy.url().should('eq', `https://app.vouch.us/?partner=${companyUrlWithoutSlash}`)
+                cy.url().should('contain', 'https://app.vouch.us/');
+                cy.url().should('contain', `partner=${companyUrlWithoutSlash}`);
             })
         }
     })
