@@ -1,11 +1,11 @@
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@2.2.0
+  cypress: cypress-io/cypress@1
 
 executors:
   with-chrome:
     docker:
-      - image: 'cypress/base-14'
+      - image: cypress/base-14
       # - image: 'cypress/browsers:node16.16.0-chrome107-ff107'
 
 commands:
