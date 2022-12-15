@@ -5,7 +5,7 @@ orbs:
 executors:
   with-chrome:
     docker:
-      - image: 'cypress/base-14:node16.16.0-chrome107-ff107'
+      - image: cypress/base-14
 
 commands:
   slack-reporter:
