@@ -5,11 +5,8 @@ orbs:
 executors:
   with-chrome:
     docker:
-      - image: 'cypress/browsers:node16.16.0-chrome107-ff107'
-#          CYPRESS_viewport: macbook-15
-#          CYPRESS_takeScreenshots: true
-#          CYPRESS_RECORD_KEY: bcc83a31-a9da-4c87-98e9-f023d062e90d
-#          CYPRESS_RETRIES: 3
+      - image: 'cypress/base-14'
+      # - image: 'cypress/browsers:node16.16.0-chrome107-ff107'
 
 commands:
   slack-reporter:
@@ -24,7 +21,7 @@ commands:
           command: |
             echo 'export SLACK_BUILD_STATUS="success"' >> $BASH_ENV
           when: on_success
-      - run:
+      - runTryi:
           name: Slack - Sending Status Alert
           shell: /bin/bash
           when: always
