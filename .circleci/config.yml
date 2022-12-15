@@ -5,8 +5,7 @@ orbs:
 executors:
   with-chrome:
     docker:
-      - image: cypress/base-14
-      # - image: 'cypress/browsers:node16.16.0-chrome107-ff107'
+      - image: 'cypress/base-14:node16.16.0-chrome107-ff107'
 
 commands:
   slack-reporter:
@@ -36,8 +35,8 @@ qa-workflow: &qa-workflow
 #        requires:
 #          - cypress/install
         name: "MarketingQA Publish_Site Tests"
-#        executor: with-chrome
-#        browser: chrome
+        executor: with-chrome
+        browser: chrome
         spec: ./cypress/integration/*
         no-workspace: true
         yarn: true
