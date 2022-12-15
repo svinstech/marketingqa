@@ -1,4 +1,4 @@
-import urls from "../configs/url_root.json";
+import urls from "../configs/url_premier_partner.json";
 const shuffle :any = require('shuffle-array');
 
 const baseUrl :string|null = Cypress.config('baseUrl')
@@ -34,7 +34,8 @@ describe('Test Broken Links', () => {
                     return false
                 })
                 cy.contains('a','Get coverage Proposal').click()
-                cy.url().should('eq', `https://app.vouch.us/?partner=${companyUrlWithoutSlash}`)
+                cy.url().should('contain', 'https://app.vouch.us/');
+                cy.url().should('contain', `partner=${companyUrlWithoutSlash}`);
             })
         }
     })
