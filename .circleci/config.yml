@@ -24,13 +24,13 @@ commands:
           command: |
             echo 'export SLACK_BUILD_STATUS="success"' >> $BASH_ENV
           when: on_success
-      - run:
-          name: Slack - Sending Status Alert
-          shell: /bin/bash
-          when: always
-          command: |
-            ./.circleci/utilities/send_build_status_to_slack.sh
-          no_output_timeout: 15m
+#       - run:
+#           name: Slack - Sending Status Alert
+#           shell: /bin/bash
+#           when: always
+#           command: |
+#           /.circleci/utilities/send_build_status_to_slack.sh
+#           no_output_timeout: 15m
 
 qa-workflow: &qa-workflow
   jobs:
