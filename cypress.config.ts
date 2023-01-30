@@ -1,6 +1,9 @@
+// import { defineConfig } from "cypress";
+
 "use strict";
 module.exports = {
     projectId: 'gwph8y',
+    // type: 'module',
     waitForAnimations: true,
     watchForFileChanges: false,
     chromeWebSecurity: false,
@@ -10,6 +13,6 @@ module.exports = {
             return require('./cypress/plugins/index.ts')(on, config);
         },
         specPattern: './cypress/integration//**/*.{js,jsx,ts,tsx}',
-        baseUrl: 'https://www.vouch.us',
+        baseUrl: 'https://www.vouch.us/',
     },
 };
