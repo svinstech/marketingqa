@@ -235,6 +235,7 @@ describe('Check all "Apply Now" / "Start Application" buttons.', () => {
 
     } else {
         cy.log("ERROR - baseUrl not defined.");
+        // skipOn(!_targetUrlObject)
     }
 })
 
