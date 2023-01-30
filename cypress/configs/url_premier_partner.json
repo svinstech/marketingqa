@@ -1,3 +1,18 @@
 {
-    "unit":"/unit"
+    "brex":"brex",
+    "capsule":"capsule",
+    "carta":"carta",
+    "mercury-lending":"mercurytearoom",
+    "stripe":"stripe",
+    "svb":"svb",
+    "svbadvantage":"svb",
+    "svb-lending":"svb",
+    "svbvc":"svb",
+    "synapse":"synapse",
+    "unit":"unit",
+    "vanta":"vanta",
+    "wework":"wework",
+    "weworkallaccess":"wework",
+    "weworkfaq":"wework",
+    "yc":"yc"
 }
