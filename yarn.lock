@@ -26,6 +26,11 @@
     "tunnel-agent" "^0.6.0"
     "uuid" "^8.3.2"
 
+"@cypress/skip-test@^2.6.1":
+  "integrity" "sha512-X+ibefBiuOmC5gKG91wRIT0/OqXeETYvu7zXktjZ3yLeO186Y8ia0K7/gQUpAwuUi28DuqMd1+7tBQVtPkzbPA=="
+  "resolved" "https://registry.npmjs.org/@cypress/skip-test/-/skip-test-2.6.1.tgz"
+  "version" "2.6.1"
+
 "@cypress/xvfb@^1.2.4":
   "integrity" "sha512-skbBzPggOVYCbnGgV+0dmBdW/s77ZkAOXIC1knS8NagwDjBrNC1LuXtQJeiN6l+m7lzmHtaoUw/ctJKdqkG57Q=="
   "resolved" "https://registry.npmjs.org/@cypress/xvfb/-/xvfb-1.2.4.tgz"
