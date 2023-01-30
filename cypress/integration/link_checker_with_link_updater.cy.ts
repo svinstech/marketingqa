@@ -1,123 +1,203 @@
+/*
+    NOTE:
 
-// const shuffle :any = require('shuffle-array');
-import shuffle from 'shuffle-array'
+    We use cy.wait(1).then(async () => {...} to execute Node code in Cypress contexts.
+    This is only done in Before() steps to populate certain variables, like the urlObjects array.
+*/
 
-// const baseUrl :string|null = Cypress.config('baseUrl')
+const shuffle :any = require('shuffle-array');
 
+const baseUrl :string|null = Cypress.config('baseUrl')
 
-let urls :string[]|null;
+interface companyUrlObject {
+    url :string,
+    companyName :string
+}
+
+let urlObjects :companyUrlObject[]; // companyUrlObjects for each relevant URL.
+let partnerUrlObjects :companyUrlObject[]; // Subset of just the 'partners' URLs.
+let ventureUrlObjects :companyUrlObject[]; // Subset of just the 'venture' URLs.
+
+const partnerPageSampleSize :number =  10;
+const venturePageSampleSize :number =  10;
+const partnerUrlRegex :RegExp = /.+\/partners\/.+/;
+const ventureUrlRegex :RegExp = /.+\/venture\/.+/;
+const applyButtonRegex :RegExp = /.*(apply|start).*(now|application).*/i
 
 /*
-    Returns an array of urls as strings if nothing goes wrong with the fetch() request.
-    Otherwise, returns null.
+    [ARGS]
+    _baseUrl    =   The domain to use to retrieve the URLs.
 
-    The urls returned are those of the https://www.vouch.us domain.
+    Returns an array of companyUrlObject if nothing goes wrong with the fetch() request.
+    Each companyUrlObject that is returned will have the _baseUrl as the domain.
 */
-async function GetUpdatedUrlList(_baseUrl = "https://www.vouch.us") :Promise<string[]|null> {
-    let urlList :string[]|null = null;
+async function GetUpdatedUrlList(_baseUrl :string|null = "https://www.vouch.us/") :Promise<companyUrlObject[]> {
+    let urlList :string[] = [];
+    let companyUrlList :companyUrlObject[] = []; // This is what gets returned.
 
-    const xmlUrl :string = `${_baseUrl}/sitemap.xml`;
-    const outerRegex :RegExp = /<\/?url>/;
-    const urlRegex :RegExp = /^\s*<loc>(.+)<\/loc>\s*$/;
-    const whitespaceRegex :RegExp = /^\s*$/;
+    if (_baseUrl) {
+        const xmlUrl :string = `${_baseUrl}/sitemap.xml`;
+        const outerRegex :RegExp = /<\/?url>/;
+        const urlRegex :RegExp = /^\s*<loc>(.+)<\/loc>\s*$/;
+        const whitespaceRegex :RegExp = /^\s*$/;
 
-    // Get the text from the xmlUrl.
-    const fetchResponse = await fetch(xmlUrl);
-    let fetchResponseText = await fetchResponse.text();
+        // Get the text from the xmlUrl.
+        const fetchResponse :Response = await fetch(xmlUrl);
+        let fetchResponseText :string = await fetchResponse.text();
 
-    // Remove newline & carriage return characters
-    fetchResponseText = fetchResponseText.replace(/\r?\n|\r/g, "");
+        // Remove newline & carriage return characters
+        fetchResponseText = fetchResponseText.replace(/\r?\n|\r/g, "");
 
-    // Isolate each url
-    urlList = fetchResponseText.split(outerRegex);
+        // Isolate each URL
+        urlList = fetchResponseText.split(outerRegex);
 
-    // Convert the urlList to just a list of the urls. (Removes all other text.)
-    const urlListStartingLength :number = urlList.length;
-    for (let i = urlListStartingLength; i >= 0; i--) {
-        const ithItem = urlList[i];
+        // Convert the urlList to just a list of the urls. (Removes all other text.)
+        const urlListStartingLength :number = urlList.length;
+        for (let i :number = urlListStartingLength; i >= 0; i--) {
+            const ithItem :string = urlList[i];
 
-        // Remove undefined/emptyString items.
-        if (!ithItem) {
-            urlList.splice(i,1);
-            continue;
-        }
-        
-        if (whitespaceRegex.test(ithItem)) {
-            // Remove whitespace elements.
-            urlList.splice(i,1);
-        } else {
-            // Change ithItem to just the url.
-            const regexMatchArray :RegExpMatchArray|null = ithItem.match(urlRegex);
-
-            // Delete items that produce no matches to the urlRegex.
-            if (regexMatchArray === null) {
+            // Remove undefined/emptyString items.
+            if (!ithItem) {
                 urlList.splice(i,1);
                 continue;
             }
+            
+            if (whitespaceRegex.test(ithItem)) {
+                // Remove whitespace elements.
+                urlList.splice(i,1);
+            } else {
+                // Change ithItem to just the URL.
+                const regexMatchArray :RegExpMatchArray|null = ithItem.match(urlRegex);
 
-            // Overwrite the ith item with the url that it contains.
-            const url = regexMatchArray[1];
-            urlList[i] = url;
+                // Delete items that produce no matches to the urlRegex.
+                if (regexMatchArray === null) {
+                    urlList.splice(i,1);
+                    continue;
+                }
+
+                // Overwrite the ith item with its URL.
+                const url :string = regexMatchArray[1];
+                urlList[i] = url;
+
+                // Populate companyUrlList with companyUrl objects.
+                const urlSegmentSplit :string[] = url.split("/");
+                const companyName :string = urlSegmentSplit[urlSegmentSplit.length - 1];
+                const companyUrlDetails :companyUrlObject = {url, companyName};
+                companyUrlList.unshift(companyUrlDetails);
+                /*
+                    Here we use unshift() instead of push() because we want the 
+                    ith item of companyUrl to correspond to the ith item of urlLsit,
+                    and this for-loop is iterating through urlList is reverse order.
+
+                    Changing this wont break anything but it may help future people and it doesnt hurt :).
+                */
+            }
         }
+
+       
+
     }
 
-    return urlList;
+    return companyUrlList;
 }
 
-urls = await GetUpdatedUrlList();
+/*
+    [ARGS]
+    targe_targetUrlObjecttUrl   =   A companyUrlObject representing a url and a company name.
+                                    This URLs will be visited and have its "Apply Now" / "Start Application" button tested.
+                                    The test will ensure that the clicking the button leads to the correct page.
 
-describe('Check all "Apply Now" buttons.', () => {
-    before('Ensure that URLs were gathered', () => {
-        expect(urls).to.not.equal(null);
-    })
+    NOTE:
+        undefined is also an expected type for _targetUrlObject.
+        This is for the edge case where the the array that is invoking this function on its contents
+            tries to invoke it on an element that doesn't exist (index out-of-bounds).
+*/
+function VerifyApplyButtonWorks(_targetUrlObject :companyUrlObject|undefined) {
+    if (_targetUrlObject) {
+        // Go to the target URL.
+        cy.visit(_targetUrlObject.url);
+
+        // Returning false here prevents Cypress from failing the test on uncaught exceptions.
+        Cypress.on('uncaught:exception', () => { return false })
+
+        // Click the application button
+        cy.contains('a', applyButtonRegex).click();
+
+        // Ensure that the resulting URL has the correct domain.
+        const vouchApplyDomain :string = 'https://app.vouch.us/';
+        cy.url().should('contain', vouchApplyDomain);
+
+        // Ensure that the resulting URL has the correct partenr slug.
+        cy.url().then(_url => {
+            const urlPartnerSlug :string = `partner=${_targetUrlObject.companyName}`;
+
+            // Debugging
+            const urlContainsPartnerName :boolean = _url.includes(urlPartnerSlug);
+            if (!urlContainsPartnerName) {
+                cy.log(`~~! EXPECTED URL TO CONTAIN: ${urlPartnerSlug}`);
+                cy.log(`ACTUAL URL: ${_url}`);
+            }
+
+            cy.url().should('contain', urlPartnerSlug);
+        })
+    } else {
+        cy.log(`Url object is undefined.`);
+    }
+}
+
+
+describe('Check all "Apply Now" / "Start Application" buttons.', () => {
+    if (baseUrl) {
+        before('Gather URLs', () => {
+            cy.wait(1).then(async () => {
+                urlObjects = await GetUpdatedUrlList(baseUrl);
+                expect(urlObjects.length).to.not.equal(0);
+                cy.log(`LINK COUNT: ${urlObjects.length}`);
+            });
+        })
+
+        describe('Test Partner pages', () => {
+            before('Filter URL list to get partner & venture URLs.', () => {
+                cy.wait(1).then(() => {
+                    partnerUrlObjects = urlObjects.filter((_companyUrlObject) => {return partnerUrlRegex.test(_companyUrlObject.url)});
+                    ventureUrlObjects = urlObjects.filter((_companyUrlObject) => {return ventureUrlRegex.test(_companyUrlObject.url)});
+
+                    //testing
+                    cy.log(`partnerUrlObjects.length: ${partnerUrlObjects.length}`);
+                    cy.log(`ventureUrlObjects.length: ${ventureUrlObjects.length}`);
+
+                    partnerUrlObjects = shuffle.pick(partnerUrlObjects, { 'picks': partnerPageSampleSize });
+                    ventureUrlObjects = shuffle.pick(ventureUrlObjects, { 'picks': venturePageSampleSize });
+
+                    //testing
+                    cy.log(`partnerUrlObjects.length (post shuffle and sample selection): ${partnerUrlObjects.length}`);
+                    cy.log(`ventureUrlObjects.length (post shuffle and sample selection): ${ventureUrlObjects.length}`);
+                })
+                
+            })
+
+            // PARTNER page tests.
+            for (let i :number = 0; i < partnerPageSampleSize; i++) {
+                it(`Checking PARTNER page: ${i}`, () => {
+                    cy.log(`PARTNER NAME: ${partnerUrlObjects[i].companyName}`);
+                    VerifyApplyButtonWorks(partnerUrlObjects[i]);
+                })
+            }
+
+            // VENTURE page tests.
+            for (let i :number = 0; i < venturePageSampleSize; i++) {
+                it(`Checking VENTURE page: ${i}`, () => {
+                    cy.log(`VENTURE NAME: ${ventureUrlObjects[i].companyName}`);
+                    VerifyApplyButtonWorks(ventureUrlObjects[i]);
+                })
+            }
+        })
+
+
+    } else {
+        cy.log("ERROR - baseUrl not defined.");
+    }
 })
-
-
-// console.log(textOnPage.length)
-
-// describe('Test Broken Links', () => {
-//     before('Get updated links', () => {
-//         let textOnPage :string = "";
-//         fetch(xmlUrl).then((response) => console.log(response))
-
-//         //testing
-//         console.log(textOnPage);
-//     })
-
-    // describe('visits a subset of the partner pages and tests for broken links', () =>{
-    //     const pages :string[] = Object.values(urls);
-    //     const linkSampleSize :number =  10//Math.min(5, pages.length); // 0 until the partner page slugs are fixed.
-
-    //     let pagesSample :string[]|string = shuffle.pick(pages, { 'picks': linkSampleSize });
-
-    //     /* 
-    //         If shuffle.pick() picks a size of 1, then it will NOT return an array. But we still want an array.
-    //         So here we ensure that pagesSample is always an array.
-    //     */
-    //     if (!Array.isArray(pagesSample)) {
-    //         pagesSample = [pagesSample];
-    //     }
-    //     for (let i = 0; i < linkSampleSize; i++){
-    //         const companyUrlSegment :string = `${pagesSample[i]}`
-    //         const companyUrlSegmentSplit :string[] = companyUrlSegment.split("/"); // ["", "companyUrlWithoutSlash"]
-    //         const companyUrlWithoutSlash :string = companyUrlSegmentSplit[companyUrlSegmentSplit.length - 1];
-
-    //         it("Checking Partner " + companyUrlWithoutSlash, () => {
-    //             cy.visit(`${baseUrl}/partners/${companyUrlWithoutSlash}`)
-
-    //             // cy.on('window:confirm', cy.stub().as('confirm'))
-    //             Cypress.on('uncaught:exception', () => {
-    //                 // returning false here prevents Cypress from
-    //                 // failing the test
-    //                 return false
-    //             })
-    //             cy.get('[id=apply-button-test]').click()
-    //             cy.url().should('contain', 'https://app.vouch.us/');
-    //             cy.url().should('contain', `partner=${companyUrlWithoutSlash}`);
-    //         })
-    //     }
-    // })
-// })
 
 // Necessary for top-level awaits to be allowed.
 export{}
