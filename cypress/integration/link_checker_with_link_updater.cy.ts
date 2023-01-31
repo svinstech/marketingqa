@@ -5,6 +5,8 @@
     This is only done in Before() steps to populate certain variables, like the urlObjects array.
 */
 import { onlyOn, skipOn } from '@cypress/skip-test'
+import { wrap } from 'cypress/types/lodash';
+import premierPartnerPages from "../configs/url_premier_partner.json";
 const shuffle :any = require('shuffle-array');
 
 const baseUrl :string|null = Cypress.config('baseUrl')
@@ -21,11 +23,13 @@ let urlObjects :companyUrlObject[]; // companyUrlObjects for each relevant URL.
 let partnerUrlObjects :companyUrlObject[]; // Subset of just the 'partners' URLs.
 let ventureUrlObjects :companyUrlObject[]; // Subset of just the 'venture' URLs.
 let ventureStudioUrlObjects :companyUrlObject[]; // Subset of just the 'venture-studio' URLs.
+let premierPartnerUrlObjects :companyUrlObject[] = []; // Subset of just the premier partner URLs.
 
 // Sample sizes for each type of URL.
 const partnerPageSampleSize :number =  5;
 const venturePageSampleSize :number =  5;
-const ventureStudioPageSampleSize :number = 4;
+const ventureStudioPageSampleSize :number = 4; // As of 1/30/2023, there are only 4.
+const premierPartnerSampleSize :number = 16;
 
 // Regex for each type of URL.
 const partnerUrlRegex :RegExp = /.+\/partners\/.+/;
@@ -33,7 +37,24 @@ const ventureUrlRegex :RegExp = /.+\/venture\/.+/;
 const ventureStudioUrlRegex :RegExp = /.+\/venture-studio\/.+/;
 
 // "Apply Now" / "Start Application" button regex.
-const applyButtonRegex :RegExp = /.*(apply|start).*(now|application).*/i
+const applyButtonRegex :RegExp = /(.*(apply|start).*(now|application))|.*(get.*coverage.*proposal).*/i
+
+// Populate premierPartnerUrlObjects
+const premierPartnerPagesKeys :string[] = Object.keys(premierPartnerPages);
+const premierPartnerPagesValues :string[] = Object.values(premierPartnerPages);
+for (let i :number = 0; i < premierPartnerPagesKeys.length; i++) {
+    const companyName = premierPartnerPagesValues[i];
+    const companyUrl = `${baseUrl}${premierPartnerPagesKeys[i]}`
+
+    const companyDetails :companyUrlObject = {
+        url:companyUrl,
+        companyName:companyName
+    }
+
+    premierPartnerUrlObjects.push(companyDetails);
+}
+
+
 
 /*
     [ARGS]
@@ -131,25 +152,49 @@ function VerifyApplyButtonWorks(_targetUrlObject :companyUrlObject|undefined) {
         // Returning false here prevents Cypress from failing the test on uncaught exceptions.
         Cypress.on('uncaught:exception', () => { return false })
 
-        // Click the application button
-        cy.contains('a', applyButtonRegex).click();
+        // Test ALL application buttons
+        cy.get('a').invoke('filter', (index :number, element:HTMLAnchorElement) => {
+            return applyButtonRegex.test(element.innerText)
+        })
+        .then(($elements :any) => {
+            const applyButtonCount = $elements.length;
 
-        // Ensure that the resulting URL has the correct domain.
-        const vouchApplyDomain :string = 'https://app.vouch.us/';
-        cy.url().should('contain', vouchApplyDomain);
+            // Log the total number of applicaition links on this page.
+            cy.log(`NUMBER OF APPLICATION LINKS: ${applyButtonCount}`);
 
-        // Ensure that the resulting URL has the correct partenr slug.
-        cy.url().then(_url => {
-            const urlPartnerSlug :string = `partner=${_targetUrlObject.companyName}`;
+            for (let i = 0; i < applyButtonCount; i++) {
+                // Click the ith application button.
+                /*
+                    NOTE:
+                        Here, we do the exact same filtering as above because when we navigate away
+                        from this page, the connection to all DOM elements on the page that we left
+                        is gone.
+                */
+                cy.get('a').invoke('filter', (index :number, element:HTMLAnchorElement) => {
+                    return applyButtonRegex.test(element.innerText)
+                }).eq(i).click();
 
-            // Debugging
-            const urlContainsPartnerName :boolean = _url.includes(urlPartnerSlug);
-            if (!urlContainsPartnerName) {
-                cy.log(`~~! EXPECTED URL TO CONTAIN: ${urlPartnerSlug}`);
-                cy.log(`ACTUAL URL: ${_url}`);
+                // Ensure that the resulting URL has the correct domain.
+                const vouchApplyDomain :string = 'https://app.vouch.us/';
+                cy.url().should('contain', vouchApplyDomain);
+
+                // Ensure that the resulting URL has the correct partenr slug.
+                cy.url().then(_url => {
+                    const urlPartnerSlug :string = `partner=${_targetUrlObject.companyName}`;
+
+                    // Debugging
+                    const urlContainsPartnerName :boolean = _url.includes(urlPartnerSlug);
+                    if (!urlContainsPartnerName) {
+                        cy.log(`~~! EXPECTED URL TO CONTAIN: ${urlPartnerSlug}`);
+                        cy.log(`ACTUAL URL: ${_url}`);
+                    }
+
+                    cy.url().should('contain', urlPartnerSlug);
+                })
+
+                // Return to the original url to check the other relevant links.
+                cy.visit(_targetUrlObject.url);
             }
-
-            cy.url().should('contain', urlPartnerSlug);
         })
     } else {
         cy.log(`Url object is undefined.`);
@@ -175,19 +220,22 @@ describe('Check all "Apply Now" / "Start Application" buttons.', () => {
                     ventureUrlObjects = urlObjects.filter((_companyUrlObject) => {return ventureUrlRegex.test(_companyUrlObject.url)});
                     ventureStudioUrlObjects = urlObjects.filter((_companyUrlObject) => {return ventureStudioUrlRegex.test(_companyUrlObject.url)});
 
-                    //testing
+                    //debugging
                     cy.log(`partnerUrlObjects.length: ${partnerUrlObjects.length}`);
                     cy.log(`ventureUrlObjects.length: ${ventureUrlObjects.length}`);
                     cy.log(`ventureStudioUrlObjects.length: ${ventureStudioUrlObjects.length}`);
+                    cy.log(`premierPartnerUrlObjects.length: ${premierPartnerUrlObjects.length}`);
 
                     partnerUrlObjects = shuffle.pick(partnerUrlObjects, { 'picks': partnerPageSampleSize });
                     ventureUrlObjects = shuffle.pick(ventureUrlObjects, { 'picks': venturePageSampleSize });
                     ventureStudioUrlObjects = shuffle.pick(ventureStudioUrlObjects, { 'picks': ventureStudioPageSampleSize });
+                    premierPartnerUrlObjects = shuffle.pick(premierPartnerUrlObjects, { 'picks': premierPartnerSampleSize });
 
-                    //testing
+                    //debugging
                     cy.log(`partnerUrlObjects.length (post shuffle and sample selection): ${partnerUrlObjects.length}`);
                     cy.log(`ventureUrlObjects.length (post shuffle and sample selection): ${ventureUrlObjects.length}`);
                     cy.log(`ventureStudioUrlObjects.length (post shuffle and sample selection): ${ventureStudioUrlObjects.length}`);
+                    cy.log(`premierPartnerUrlObjects.length (post shuffle and sample selection): ${premierPartnerUrlObjects.length}`);
                 })
                 
             })
@@ -225,6 +273,19 @@ describe('Check all "Apply Now" / "Start Application" buttons.', () => {
 
                     if (urlObject) {
                         cy.log(`VENTURE-STUDIO NAME: ${urlObject.companyName}`);
+                    }
+
+                    VerifyApplyButtonWorks(urlObject);
+                })
+            }
+
+            // PREMIER PARTNER page tests.
+            for (let i :number = 0; i < premierPartnerSampleSize; i++) {
+                it(`Checking PREMIER PARTNER page: ${i}`, () => {
+                    const urlObject :companyUrlObject = premierPartnerUrlObjects[i];
+
+                    if (urlObject) {
+                        cy.log(`PREMIER PARTNER URL: ${urlObject.url}`);
                     }
 
                     VerifyApplyButtonWorks(urlObject);
