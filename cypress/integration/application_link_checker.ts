@@ -211,7 +211,7 @@ function VerifyApplyButtonWorks(_targetUrlObject :companyUrlObject|undefined) {
                 })
             }
         })
-    } else {
+    } else { 
         cy.log(`Url object is undefined.`);
         // skipOn(!_targetUrlObject)
     }
