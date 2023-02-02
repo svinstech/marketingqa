@@ -249,7 +249,7 @@ function ValidateApplicationPage(_targetUrlObject :companyUrlObject, _returnToOr
 }
 
 
-describe('Check all "Apply Now" / "Start Application" buttons.', () => {
+describe('Check all application links.', () => {
     if (baseUrl) {
         before('Gather URLs', () => {
             cy.wait(1).then(async () => {
@@ -259,87 +259,83 @@ describe('Check all "Apply Now" / "Start Application" buttons.', () => {
             });
         })
 
-        describe('Test Partner pages', () => {
-            before('Filter URL list to get these URLs: partner, venture, & venture-studio.', () => {
-                cy.wait(1).then(() => {
-                    partnerUrlObjects = urlObjects.filter((_companyUrlObject) => {return partnerUrlRegex.test(_companyUrlObject.url)});
-                    ventureUrlObjects = urlObjects.filter((_companyUrlObject) => {return ventureUrlRegex.test(_companyUrlObject.url)});
-                    ventureStudioUrlObjects = urlObjects.filter((_companyUrlObject) => {return ventureStudioUrlRegex.test(_companyUrlObject.url)});
+        before('Filter URL list to get these URLs: partner, venture, & venture-studio.', () => {
+            cy.wait(1).then(() => {
+                partnerUrlObjects = urlObjects.filter((_companyUrlObject) => {return partnerUrlRegex.test(_companyUrlObject.url)});
+                ventureUrlObjects = urlObjects.filter((_companyUrlObject) => {return ventureUrlRegex.test(_companyUrlObject.url)});
+                ventureStudioUrlObjects = urlObjects.filter((_companyUrlObject) => {return ventureStudioUrlRegex.test(_companyUrlObject.url)});
 
-                    //debugging
-                    cy.log(`partnerUrlObjects.length: ${partnerUrlObjects.length}`);
-                    cy.log(`ventureUrlObjects.length: ${ventureUrlObjects.length}`);
-                    cy.log(`ventureStudioUrlObjects.length: ${ventureStudioUrlObjects.length}`);
-                    cy.log(`premierPartnerUrlObjects.length: ${premierPartnerUrlObjects.length}`);
+                //debugging
+                cy.log(`partnerUrlObjects.length: ${partnerUrlObjects.length}`);
+                cy.log(`ventureUrlObjects.length: ${ventureUrlObjects.length}`);
+                cy.log(`ventureStudioUrlObjects.length: ${ventureStudioUrlObjects.length}`);
+                cy.log(`premierPartnerUrlObjects.length: ${premierPartnerUrlObjects.length}`);
 
-                    partnerUrlObjects = shuffle.pick(partnerUrlObjects, { 'picks': partnerPageSampleSize });
-                    ventureUrlObjects = shuffle.pick(ventureUrlObjects, { 'picks': venturePageSampleSize });
-                    ventureStudioUrlObjects = shuffle.pick(ventureStudioUrlObjects, { 'picks': ventureStudioPageSampleSize });
-                    premierPartnerUrlObjects = shuffle.pick(premierPartnerUrlObjects, { 'picks': premierPartnerSampleSize });
+                partnerUrlObjects = shuffle.pick(partnerUrlObjects, { 'picks': partnerPageSampleSize });
+                ventureUrlObjects = shuffle.pick(ventureUrlObjects, { 'picks': venturePageSampleSize });
+                ventureStudioUrlObjects = shuffle.pick(ventureStudioUrlObjects, { 'picks': ventureStudioPageSampleSize });
+                premierPartnerUrlObjects = shuffle.pick(premierPartnerUrlObjects, { 'picks': premierPartnerSampleSize });
 
-                    //debugging
-                    cy.log(`partnerUrlObjects.length (post shuffle and sample selection): ${partnerUrlObjects.length}`);
-                    cy.log(`ventureUrlObjects.length (post shuffle and sample selection): ${ventureUrlObjects.length}`);
-                    cy.log(`ventureStudioUrlObjects.length (post shuffle and sample selection): ${ventureStudioUrlObjects.length}`);
-                    cy.log(`premierPartnerUrlObjects.length (post shuffle and sample selection): ${premierPartnerUrlObjects.length}`);
-                })
-                
+                //debugging
+                cy.log(`partnerUrlObjects.length (post shuffle and sample selection): ${partnerUrlObjects.length}`);
+                cy.log(`ventureUrlObjects.length (post shuffle and sample selection): ${ventureUrlObjects.length}`);
+                cy.log(`ventureStudioUrlObjects.length (post shuffle and sample selection): ${ventureStudioUrlObjects.length}`);
+                cy.log(`premierPartnerUrlObjects.length (post shuffle and sample selection): ${premierPartnerUrlObjects.length}`);
             })
-
-            // PARTNER page tests.
-            for (let i :number = 0; i < partnerPageSampleSize; i++) {
-                it(`Checking PARTNER page: ${i}`, () => {
-                    const urlObject :companyUrlObject = partnerUrlObjects[i];
-
-                    if (urlObject) {
-                        cy.log(`PARTNER NAME: ${urlObject.companyName}`);
-                    }
-
-                    VerifyApplyButtonWorks(urlObject);
-                })
-            }
-
-            // VENTURE page tests.
-            for (let i :number = 0; i < venturePageSampleSize; i++) {
-                it(`Checking VENTURE page: ${i}`, () => {
-                    const urlObject :companyUrlObject = ventureUrlObjects[i];
-
-                    if (urlObject) {
-                        cy.log(`VENTURE NAME: ${urlObject.companyName}`);
-                    }
-
-                    VerifyApplyButtonWorks(urlObject);
-                })
-            }
-
-            // VENTURE-STUDIO page tests.
-            for (let i :number = 0; i < ventureStudioPageSampleSize; i++) {
-                it(`Checking VENTURE-STUDIO page: ${i}`, () => {
-                    const urlObject :companyUrlObject = ventureStudioUrlObjects[i];
-
-                    if (urlObject) {
-                        cy.log(`VENTURE-STUDIO NAME: ${urlObject.companyName}`);
-                    }
-
-                    VerifyApplyButtonWorks(urlObject);
-                })
-            }
-
-            // PREMIER PARTNER page tests.
-            for (let i :number = 0; i < premierPartnerSampleSize; i++) {
-                it(`Checking PREMIER PARTNER page: ${i}`, () => {
-                    const urlObject :companyUrlObject = premierPartnerUrlObjects[i];
-
-                    if (urlObject) {
-                        cy.log(`PREMIER PARTNER URL: ${urlObject.url}`);
-                    }
-
-                    VerifyApplyButtonWorks(urlObject);
-                })
-            }
+            
         })
 
+        // PARTNER page tests.
+        for (let i :number = 0; i < partnerPageSampleSize; i++) {
+            it(`Checking PARTNER page: ${i}`, () => {
+                const urlObject :companyUrlObject = partnerUrlObjects[i];
 
+                if (urlObject) {
+                    cy.log(`PARTNER NAME: ${urlObject.companyName}`);
+                }
+
+                VerifyApplyButtonWorks(urlObject);
+            })
+        }
+
+        // VENTURE page tests.
+        for (let i :number = 0; i < venturePageSampleSize; i++) {
+            it(`Checking VENTURE page: ${i}`, () => {
+                const urlObject :companyUrlObject = ventureUrlObjects[i];
+
+                if (urlObject) {
+                    cy.log(`VENTURE NAME: ${urlObject.companyName}`);
+                }
+
+                VerifyApplyButtonWorks(urlObject);
+            })
+        }
+
+        // VENTURE-STUDIO page tests.
+        for (let i :number = 0; i < ventureStudioPageSampleSize; i++) {
+            it(`Checking VENTURE-STUDIO page: ${i}`, () => {
+                const urlObject :companyUrlObject = ventureStudioUrlObjects[i];
+
+                if (urlObject) {
+                    cy.log(`VENTURE-STUDIO NAME: ${urlObject.companyName}`);
+                }
+
+                VerifyApplyButtonWorks(urlObject);
+            })
+        }
+
+        // PREMIER PARTNER page tests.
+        for (let i :number = 0; i < premierPartnerSampleSize; i++) {
+            it(`Checking PREMIER PARTNER page: ${i}`, () => {
+                const urlObject :companyUrlObject = premierPartnerUrlObjects[i];
+
+                if (urlObject) {
+                    cy.log(`PREMIER PARTNER URL: ${urlObject.url}`);
+                }
+
+                VerifyApplyButtonWorks(urlObject);
+            })
+        }
     } else {
         cy.log("ERROR - baseUrl not defined.");
         // skipOn(!_targetUrlObject)
