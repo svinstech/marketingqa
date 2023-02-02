@@ -4,7 +4,7 @@
 set -o errexit
 
 # Use the error status of the first failure, rather than that of the last item in a pipeline.
-set -o pipefail
+# set -o pipefail
 
 SLACK_SUCCESS_WEBHOOK=$SLACK_LINK_CHECKER_INCOMING_WEBHOOK
 SLACK_FAILURE_WEBHOOK=$SLACK_LINK_CHECKER_INCOMING_WEBHOOK
@@ -60,7 +60,7 @@ echo "ORIGINATING_PROJECT_REPONAME: ${ORIGINATING_PROJECT_REPONAME}"
 echo "ORIGINATING_PROJECT_USERNAME: ${ORIGINATING_PROJECT_USERNAME}"
 echo "ORIGINATING_BUILD_URL: ${ORIGINATING_BUILD_URL}"
 
-if [[ ! -z "${ORIGINATING_SHA1}" ]]; then
+if [ ! -z "${ORIGINATING_SHA1}" ]; then
   # build the url to the commit
   COMMIT_URL="https://github.com/${ORIGINATING_PROJECT_USERNAME}/${ORIGINATING_PROJECT_REPONAME}/commit/${ORIGINATING_SHA1}"
 
@@ -75,7 +75,7 @@ fi
 
 # notify slack user directly
 # https://api.slack.com/docs/message-formatting#variables
-if [[ -z "${ORIGINATING_DEVELOPER}" ]]; then
+if [ -z "${ORIGINATING_DEVELOPER}" ]; then
   ORIGINATING_DEVELOPER="unset"
 fi
 
@@ -113,15 +113,18 @@ echo "SLACK_MENTIONS: ${SLACK_MENTIONS}"
 
 # message icon
 VOUCH_ICON=":vouchfail:"
-if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
+if [ "${SLACK_BUILD_STATUS}" = "success" ]; then
   VOUCH_ICON=":vouch:"
 fi
 
 # to whom to target message
-SLACK_NOTIFY="${ORIGINATING_DEVELOPER:-vouch_dev}"
-if [[ "${SLACK_BUILD_STATUS}" != "success" ]]; then
-  SLACK_NOTIFY+=" ${SLACK_MENTIONS}"
+SLACK_NOTIFY_PART1="${ORIGINATING_DEVELOPER:-vouch_dev}"
+SLACK_NOTIFY_PART2=""
+if [ "${SLACK_BUILD_STATUS}" != "success" ]; then
+  SLACK_NOTIFY_PART2=" ${SLACK_MENTIONS}"
 fi
+
+SLACK_NOTIFY="${SLACK_NOTIFY_PART1}${SLACK_NOTIFY_PART2}"
 
 # attempt to build url to the cypress run in the dashboard
 RUN_URL="https://dashboard.cypress.io/#/projects/iukrxp/runs"
@@ -142,20 +145,24 @@ RUN_URL="https://dashboard.cypress.io/#/projects/iukrxp/runs"
 # done < "${input}"
 
 # build the message content
-MESSAGE="${VOUCH_ICON} marketingqa publish_site test status: ${SLACK_BUILD_STATUS}! <${RUN_URL}|Cypress Dashboard> | <${CIRCLE_BUILD_URL}|CircleCI Job>\n"
-MESSAGE+="<${ORIGINATING_BUILD_URL}|${ORIGINATING_PROJECT_REPONAME:-marketingqa} job run> for git branch ${ORIGINATING_BRANCH}\n"
+MESSAGE_PART1="${VOUCH_ICON} marketingqa publish_site test status: ${SLACK_BUILD_STATUS}! <${RUN_URL}|Cypress Dashboard> | <${CIRCLE_BUILD_URL}|CircleCI Job>\n"
+MESSAGE_PART2="<${ORIGINATING_BUILD_URL}|${ORIGINATING_PROJECT_REPONAME:-"marketingqa"} job run> for git branch ${ORIGINATING_BRANCH}\n"
 ### MESSAGE+="(<${COMMIT_URL:-unset}|${SHORT_SHA1}> by ${SLACK_NOTIFY}) ${SHORT_GIT_MESSAGE}\n"
+MESSAGE_PART3=""
 
 # and add PR to message if available
-if [[ ! -z "${ORIGINATING_PULL_REQUEST}" ]]; then
+if [ ! -z "${ORIGINATING_PULL_REQUEST}" ]; then
   PR_NUM=$(echo "${ORIGINATING_PULL_REQUEST}" | awk -F/ '{print $NF}')
-  MESSAGE+="<${ORIGINATING_PULL_REQUEST}|${ORIGINATING_PROJECT_REPONAME} pull request #${PR_NUM}>"
+  MESSAGE_PART3="<${ORIGINATING_PULL_REQUEST}|${ORIGINATING_PROJECT_REPONAME} pull request #${PR_NUM}>"
 fi
+
+# Construct message (NOTE: Concatenate stopped working for some reason...)
+MESSAGE="${MESSAGE_PART1}${MESSAGE_PART2}${MESSAGE_PART3}"
 
 JOB_STATUS=""
 # cannot use orb in version 2.0 so cargo culting the slack code for slack/status
 # https://github.com/CircleCI-Public/slack-orb/blob/staging/src/commands/status.yml
-if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
+if [ "${SLACK_BUILD_STATUS}" = "success" ]; then
   curl -X POST -H 'Content-type: application/json' \
     --data "{ \
               \"blocks\": \
@@ -180,7 +187,7 @@ if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
             }" "${SLACK_SUCCESS_WEBHOOK}"
   JOB_STATUS="Job completed successfully. Alert sent."
 
-elif [[ "${SLACK_BUILD_STATUS}" != "success" && ${ORIGINATING_BRANCH} != "master" && "${SLACK_UID}" != "!here" ]]; then
+elif [ "${SLACK_BUILD_STATUS}" != "success" && ${ORIGINATING_BRANCH} != "master" && "${SLACK_UID}" != "!here" ]; then
   FAILURE_MESSAGE_CHANNEL="${SLACK_UID}"
   curl -X POST -H 'Content-type: application/json' \
     --data "{ \
