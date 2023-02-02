@@ -4,7 +4,7 @@
 set -o errexit
 
 # Use the error status of the first failure, rather than that of the last item in a pipeline.
-set -o pipefail
+# set -o pipefail
 
 SLACK_SUCCESS_WEBHOOK=$SLACK_LINK_CHECKER_INCOMING_WEBHOOK
 SLACK_FAILURE_WEBHOOK=$SLACK_LINK_CHECKER_INCOMING_WEBHOOK
