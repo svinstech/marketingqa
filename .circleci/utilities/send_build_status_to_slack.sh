@@ -118,10 +118,13 @@ if [ "${SLACK_BUILD_STATUS}" = "success" ]; then
 fi
 
 # to whom to target message
-SLACK_NOTIFY="${ORIGINATING_DEVELOPER:-vouch_dev}"
+SLACK_NOTIFY_PART1="${ORIGINATING_DEVELOPER:-vouch_dev}"
+SLACK_NOTIFY_PART2=""
 if [ "${SLACK_BUILD_STATUS}" != "success" ]; then
-  SLACK_NOTIFY+=" ${SLACK_MENTIONS}"
+  SLACK_NOTIFY_PART2=" ${SLACK_MENTIONS}"
 fi
+
+SLACK_NOTIFY="${SLACK_NOTIFY_PART1}${SLACK_NOTIFY_PART2}"
 
 # attempt to build url to the cypress run in the dashboard
 RUN_URL="https://dashboard.cypress.io/#/projects/iukrxp/runs"
@@ -142,20 +145,19 @@ RUN_URL="https://dashboard.cypress.io/#/projects/iukrxp/runs"
 # done < "${input}"
 
 # build the message content
-MESSAGE="${VOUCH_ICON} marketingqa publish_site test status: ${SLACK_BUILD_STATUS}! <${RUN_URL}|Cypress Dashboard> | <${CIRCLE_BUILD_URL}|CircleCI Job>\n<${ORIGINATING_BUILD_URL}|marketingqa job run> for git branch ${ORIGINATING_BRANCH}\n"
-### MESSAGE+="<${ORIGINATING_BUILD_URL}|marketingqa job run> for git branch ${ORIGINATING_BRANCH}\n"
+MESSAGE_PART1="${VOUCH_ICON} marketingqa publish_site test status: ${SLACK_BUILD_STATUS}! <${RUN_URL}|Cypress Dashboard> | <${CIRCLE_BUILD_URL}|CircleCI Job>\n<${ORIGINATING_BUILD_URL}|marketingqa job run> for git branch ${ORIGINATING_BRANCH}\n"
+MESSAGE_PART2="<${ORIGINATING_BUILD_URL}|${ORIGINATING_PROJECT_REPONAME:-"marketingqa"} job run> for git branch ${ORIGINATING_BRANCH}\n"
 ### MESSAGE+="(<${COMMIT_URL:-unset}|${SHORT_SHA1}> by ${SLACK_NOTIFY}) ${SHORT_GIT_MESSAGE}\n"
-
-#testing
-MESSAGE+=""
-MESSAGE+=" "
-MESSAGE+="T E S T"
+MESSAGE_PART3=""
 
 # and add PR to message if available
 if [ ! -z "${ORIGINATING_PULL_REQUEST}" ]; then
   PR_NUM=$(echo "${ORIGINATING_PULL_REQUEST}" | awk -F/ '{print $NF}')
-  MESSAGE+="<${ORIGINATING_PULL_REQUEST}|${ORIGINATING_PROJECT_REPONAME} pull request #${PR_NUM}>"
+  MESSAGE_PART3="<${ORIGINATING_PULL_REQUEST}|${ORIGINATING_PROJECT_REPONAME} pull request #${PR_NUM}>"
 fi
+
+# Construct message (NOTE: Concatenate stopped working for some reason...)
+MESSAGE="${MESSAGE_PART1}${MESSAGE_PART2}${MESSAGE_PART3}"
 
 JOB_STATUS=""
 # cannot use orb in version 2.0 so cargo culting the slack code for slack/status
