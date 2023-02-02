@@ -26,10 +26,10 @@ let ventureStudioUrlObjects :companyUrlObject[]; // Subset of just the 'venture-
 let premierPartnerUrlObjects :companyUrlObject[] = []; // Subset of just the premier partner URLs.
 
 // Sample sizes for each type of URL.
-const partnerPageSampleSize :number =  5;
-const venturePageSampleSize :number =  5;
-const ventureStudioPageSampleSize :number = 4; // As of 1/30/2023, there are only 4.
-const premierPartnerSampleSize :number = 16;
+const partnerPageSampleSize :number =  1//5;
+const venturePageSampleSize :number =  1//5;
+const ventureStudioPageSampleSize :number = 1//4; // As of 1/30/2023, there are only 4.
+const premierPartnerSampleSize :number = 1//16; // Test all of them since they're all unique and there aren't that many.
 
 // Regex for each type of URL.
 const partnerUrlRegex :RegExp = /.+\/partners\/.+/;
