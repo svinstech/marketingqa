@@ -113,13 +113,13 @@ echo "SLACK_MENTIONS: ${SLACK_MENTIONS}"
 
 # message icon
 VOUCH_ICON=":vouchfail:"
-if [ "${SLACK_BUILD_STATUS}" -e "success" ]; then
+if [ "${SLACK_BUILD_STATUS}" = "success" ]; then
   VOUCH_ICON=":vouch:"
 fi
 
 # to whom to target message
 SLACK_NOTIFY="${ORIGINATING_DEVELOPER:-vouch_dev}"
-if [ "${SLACK_BUILD_STATUS}" -ne "success" ]; then
+if [ "${SLACK_BUILD_STATUS}" != "success" ]; then
   SLACK_NOTIFY+=" ${SLACK_MENTIONS}"
 fi
 
@@ -155,7 +155,7 @@ fi
 JOB_STATUS=""
 # cannot use orb in version 2.0 so cargo culting the slack code for slack/status
 # https://github.com/CircleCI-Public/slack-orb/blob/staging/src/commands/status.yml
-if [ "${SLACK_BUILD_STATUS}" -e "success" ]; then
+if [ "${SLACK_BUILD_STATUS}" = "success" ]; then
   curl -X POST -H 'Content-type: application/json' \
     --data "{ \
               \"blocks\": \
@@ -180,7 +180,7 @@ if [ "${SLACK_BUILD_STATUS}" -e "success" ]; then
             }" "${SLACK_SUCCESS_WEBHOOK}"
   JOB_STATUS="Job completed successfully. Alert sent."
 
-elif [ "${SLACK_BUILD_STATUS}" -ne "success" && ${ORIGINATING_BRANCH} -ne "master" && "${SLACK_UID}" -ne "!here" ]; then
+elif [ "${SLACK_BUILD_STATUS}" != "success" && ${ORIGINATING_BRANCH} != "master" && "${SLACK_UID}" != "!here" ]; then
   FAILURE_MESSAGE_CHANNEL="${SLACK_UID}"
   curl -X POST -H 'Content-type: application/json' \
     --data "{ \
