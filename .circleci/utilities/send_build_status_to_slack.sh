@@ -60,7 +60,7 @@ echo "ORIGINATING_PROJECT_REPONAME: ${ORIGINATING_PROJECT_REPONAME}"
 echo "ORIGINATING_PROJECT_USERNAME: ${ORIGINATING_PROJECT_USERNAME}"
 echo "ORIGINATING_BUILD_URL: ${ORIGINATING_BUILD_URL}"
 
-if [[ ! -z "${ORIGINATING_SHA1}" ]]; then
+if [ ! -z "${ORIGINATING_SHA1}" ]; then
   # build the url to the commit
   COMMIT_URL="https://github.com/${ORIGINATING_PROJECT_USERNAME}/${ORIGINATING_PROJECT_REPONAME}/commit/${ORIGINATING_SHA1}"
 
@@ -75,7 +75,7 @@ fi
 
 # notify slack user directly
 # https://api.slack.com/docs/message-formatting#variables
-if [[ -z "${ORIGINATING_DEVELOPER}" ]]; then
+if [ -z "${ORIGINATING_DEVELOPER}" ]; then
   ORIGINATING_DEVELOPER="unset"
 fi
 
@@ -113,13 +113,13 @@ echo "SLACK_MENTIONS: ${SLACK_MENTIONS}"
 
 # message icon
 VOUCH_ICON=":vouchfail:"
-if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
+if [ "${SLACK_BUILD_STATUS}" -e "success" ]; then
   VOUCH_ICON=":vouch:"
 fi
 
 # to whom to target message
 SLACK_NOTIFY="${ORIGINATING_DEVELOPER:-vouch_dev}"
-if [[ "${SLACK_BUILD_STATUS}" != "success" ]]; then
+if [ "${SLACK_BUILD_STATUS}" -ne "success" ]; then
   SLACK_NOTIFY+=" ${SLACK_MENTIONS}"
 fi
 
@@ -147,7 +147,7 @@ MESSAGE+="<${ORIGINATING_BUILD_URL}|${ORIGINATING_PROJECT_REPONAME:-marketingqa}
 ### MESSAGE+="(<${COMMIT_URL:-unset}|${SHORT_SHA1}> by ${SLACK_NOTIFY}) ${SHORT_GIT_MESSAGE}\n"
 
 # and add PR to message if available
-if [[ ! -z "${ORIGINATING_PULL_REQUEST}" ]]; then
+if [ ! -z "${ORIGINATING_PULL_REQUEST}" ]; then
   PR_NUM=$(echo "${ORIGINATING_PULL_REQUEST}" | awk -F/ '{print $NF}')
   MESSAGE+="<${ORIGINATING_PULL_REQUEST}|${ORIGINATING_PROJECT_REPONAME} pull request #${PR_NUM}>"
 fi
@@ -155,7 +155,7 @@ fi
 JOB_STATUS=""
 # cannot use orb in version 2.0 so cargo culting the slack code for slack/status
 # https://github.com/CircleCI-Public/slack-orb/blob/staging/src/commands/status.yml
-if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
+if [ "${SLACK_BUILD_STATUS}" -e "success" ]; then
   curl -X POST -H 'Content-type: application/json' \
     --data "{ \
               \"blocks\": \
@@ -180,7 +180,7 @@ if [[ "${SLACK_BUILD_STATUS}" = "success" ]]; then
             }" "${SLACK_SUCCESS_WEBHOOK}"
   JOB_STATUS="Job completed successfully. Alert sent."
 
-elif [[ "${SLACK_BUILD_STATUS}" != "success" && ${ORIGINATING_BRANCH} != "master" && "${SLACK_UID}" != "!here" ]]; then
+elif [ "${SLACK_BUILD_STATUS}" -ne "success" && ${ORIGINATING_BRANCH} -ne "master" && "${SLACK_UID}" -ne "!here" ]; then
   FAILURE_MESSAGE_CHANNEL="${SLACK_UID}"
   curl -X POST -H 'Content-type: application/json' \
     --data "{ \
