@@ -143,7 +143,7 @@ RUN_URL="https://dashboard.cypress.io/#/projects/iukrxp/runs"
 
 # build the message content
 MESSAGE="${VOUCH_ICON} marketingqa publish_site test status: ${SLACK_BUILD_STATUS}! <${RUN_URL}|Cypress Dashboard> | <${CIRCLE_BUILD_URL}|CircleCI Job>\n"
-MESSAGE+="<${ORIGINATING_BUILD_URL}|${ORIGINATING_PROJECT_REPONAME:-"marketingqa"} job run> for git branch ${ORIGINATING_BRANCH}\n"
+MESSAGE+="<${ORIGINATING_BUILD_URL}|marketingqa job run> for git branch ${ORIGINATING_BRANCH}\n"
 ### MESSAGE+="(<${COMMIT_URL:-unset}|${SHORT_SHA1}> by ${SLACK_NOTIFY}) ${SHORT_GIT_MESSAGE}\n"
 
 # and add PR to message if available
