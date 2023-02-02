@@ -29,7 +29,7 @@ commands:
           shell: /bin/bash
           when: always
           command: |
-            sh /.circleci/utilities/send_build_status_to_slack.sh
+            sh ./.circleci/utilities/send_build_status_to_slack.sh
           no_output_timeout: 15m
 
 qa-workflow: &qa-workflow
