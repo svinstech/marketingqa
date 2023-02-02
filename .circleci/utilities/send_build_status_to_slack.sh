@@ -146,6 +146,11 @@ MESSAGE="${VOUCH_ICON} marketingqa publish_site test status: ${SLACK_BUILD_STATU
 ### MESSAGE+="<${ORIGINATING_BUILD_URL}|marketingqa job run> for git branch ${ORIGINATING_BRANCH}\n"
 ### MESSAGE+="(<${COMMIT_URL:-unset}|${SHORT_SHA1}> by ${SLACK_NOTIFY}) ${SHORT_GIT_MESSAGE}\n"
 
+#testing
+MESSAGE+=""
+MESSAGE+=" "
+MESSAGE+="T E S T"
+
 # and add PR to message if available
 if [ ! -z "${ORIGINATING_PULL_REQUEST}" ]; then
   PR_NUM=$(echo "${ORIGINATING_PULL_REQUEST}" | awk -F/ '{print $NF}')
