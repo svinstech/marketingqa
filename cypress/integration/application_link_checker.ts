@@ -8,7 +8,8 @@ import { skipOn } from '@cypress/skip-test'
 import premierPartnerPages from "../configs/url_premier_partner.json";
 const shuffle :any = require('shuffle-array');
 const baseUrl :string|null = Cypress.config('baseUrl')
-import { companyUrlObject, GetUpdatedUrlList } from "../functions/link_checker_functions";
+import { GetUpdatedUrlList } from "../functions/link_checker_functions";
+import { companyUrlObject } from "../interfaces/link_checker_interfaces"
 
 // Master array for URL objects.
 let urlObjects :companyUrlObject[]; // companyUrlObjects for each relevant URL.

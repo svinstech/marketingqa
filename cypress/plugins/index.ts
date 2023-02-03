@@ -21,7 +21,7 @@ module.exports = (on:any, config:any) => {
   // `config` is the resolved Cypress config
 }
 
-const companyUrlObject = require("../functions/link_checker_functions");
+const companyUrlObject = require("../interfaces/link_checker_interfaces");
 
 declare namespace Cypress {
   interface Chainable<Subject = any> {
