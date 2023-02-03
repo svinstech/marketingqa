@@ -37,7 +37,7 @@
             tries to invoke it on an element that doesn't exist (index out-of-bounds).
 */
 
-import { companyUrlObject } from "../functions/link_checker_functions";
+import { companyUrlObject } from "../interfaces/link_checker_interfaces";
 
 /*
     [ARGS]

@@ -1,9 +1,4 @@
-
-
-export interface companyUrlObject {
-    url :string,
-    companyName :string
-}
+import { companyUrlObject } from "../interfaces/link_checker_interfaces"
 
 
 /*
