@@ -20,3 +20,12 @@ module.exports = (on:any, config:any) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
 }
+
+const companyUrlObject = require("../functions/link_checker_functions");
+
+declare namespace Cypress {
+  interface Chainable<Subject = any> {
+      VerifyApplyButtonWorks(_targetUrlObject :typeof companyUrlObject|undefined): void
+      ValidateApplicationPage(_targetUrlObject :typeof companyUrlObject, _returnToOriginalUrl? :boolean): void
+  }
+}
