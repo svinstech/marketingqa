@@ -1,4 +1,4 @@
-/// <reference types="cypress" />
+/// <reference types="@cypress/grep" />
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //
@@ -19,6 +19,7 @@
 module.exports = (on:any, config:any) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
+  return require('@cypress/grep/src/plugin')(config);
 }
 
 const companyUrlObject = require("../interfaces/link_checker_interfaces");
