@@ -17,11 +17,12 @@
   },
   "homepage": "https://github.com/svinstech/marketingqa#readme",
   "dependencies": {
-    "cypress": "^11.2.0",
+    "cypress": "^12.13.0",
     "node-fetch": "^2.6.7",
     "shuffle-array": "^1.0.1"
   },
   "devDependencies": {
+    "@cypress/grep": "^3.1.5",
     "@cypress/skip-test": "^2.6.1",
     "@types/shuffle-array": "^1.0.2",
     "typescript": "^4.9.3"
