@@ -15,4 +15,8 @@ module.exports = {
         specPattern: './cypress/integration//**/*.{js,jsx,ts,tsx}',
         baseUrl: 'https://www.vouch.us/',
     },
+    env: {
+        "grepOmitFiltered": true,
+        "grepFilterSpecs": true
+    }
 };
