@@ -85,7 +85,7 @@ describe('Check all application links.', () => {
         })
 
         // PARTNER page tests.
-        describe("PARTNER page tests", () => {
+        describe("PARTNER page tests", { tags : ['@linkChecker', '@partner'] }, () => {
             let testType = "PARTNER"
             for (let i :number = 0; i < partnerPageSampleSize; i++) {
                 it(`Checking ${testType} page: ${i}`, () => {
@@ -101,7 +101,7 @@ describe('Check all application links.', () => {
         })
 
         // VENTURE page tests.
-        describe("VENTURE page tests", { tags : ['@tagExample']}, () => {
+        describe("VENTURE page tests", { tags : ['@linkChecker', '@venture'] }, () => {
             let testType = "VENTURE"
             for (let i :number = 0; i < venturePageSampleSize; i++) {
                 it(`Checking ${testType} page: ${i}`, () => {
@@ -117,7 +117,7 @@ describe('Check all application links.', () => {
         })
 
         // VENTURE-STUDIO page tests. - As of June, 2023, there seem to be no more venture-studio links.
-        // describe("VENTURE-STUDIO page tests", () => {
+        // describe("VENTURE-STUDIO page tests", { tags : ['@linkChecker', '@ventureStudio'] }, () => {
         //     let testType = "VENTURE-STUDIO"
         //     for (let i :number = 0; i < ventureStudioPageSampleSize; i++) {
         //         it(`Checking ${testType} page: ${i}`, () => {
@@ -132,7 +132,7 @@ describe('Check all application links.', () => {
         // })
 
         // PREMIER PARTNER page tests.
-        describe("PREMIER PARTNER page tests", () => {
+        describe("PREMIER PARTNER page tests", { tags : ['@linkChecker', '@premierPartner'] }, () => {
             let testType = "PREMIER PARTNER"
             for (let i :number = 0; i < premierPartnerSampleSize; i++) {
                 it(`Checking ${testType} page: ${i}`, () => {
