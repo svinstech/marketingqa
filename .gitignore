@@ -8,6 +8,7 @@ node_modules
 
 /cypress/reports
 /cypress/screenshots
+/cypress/downloads
 
 # local env files
 .env
