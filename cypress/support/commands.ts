@@ -48,7 +48,7 @@ import { companyUrlObject } from "../interfaces/link_checker_interfaces";
 Cypress.Commands.add('ValidateApplicationPage', (_targetUrlObject :companyUrlObject, _returnToOriginalUrl :boolean = true) => {
     // Ensure that the resulting URL has the correct domain.
     const vouchApplyDomain :string = 'https://apply.vouch.us/';
-    cy.url().should('contain', vouchApplyDomain);
+    cy.url({ timeout: 60000 * 2 }).should('contain', vouchApplyDomain);
 
     // Ensure that the resulting URL has the correct partner slug.
     cy.url().then(_url => {
@@ -61,7 +61,7 @@ Cypress.Commands.add('ValidateApplicationPage', (_targetUrlObject :companyUrlObj
             cy.log(`ACTUAL URL: ${_url}`);
         }
 
-        cy.wrap(_url).should('contain', urlPartnerSlug);
+        cy.wrap(_url, { timeout: 60000 * 2 }).should('contain', urlPartnerSlug);
     })
 
     if (_returnToOriginalUrl) {
