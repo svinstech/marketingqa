@@ -50,7 +50,7 @@ Cypress.Commands.add('ValidateApplicationPage', (_targetUrlObject :companyUrlObj
     const vouchApplyDomain :string = 'https://apply.vouch.us/';
     cy.url().should('contain', vouchApplyDomain);
 
-    // Ensure that the resulting URL has the correct partenr slug.
+    // Ensure that the resulting URL has the correct partner slug.
     cy.url().then(_url => {
         const urlPartnerSlug :string = `partner=${_targetUrlObject.companyName}`;
 
@@ -145,7 +145,6 @@ Cypress.Commands.add('VerifyApplyButtonWorks', (_targetUrlObject :companyUrlObje
         })
     } else { 
         cy.log(`Url object is undefined.`);
-        // skipOn(!_targetUrlObject)
     }
 })
 
