@@ -53,8 +53,8 @@ describe('Check all application links.', () => {
         before('Gather URLs', () => {
             cy.wait(1).then(async () => {
                 urlObjects = await GetUpdatedUrlList(baseUrl);
-                expect(urlObjects.length).to.not.equal(0); // fails here
-                cy.log(`LINK COUNT: ${urlObjects.length}`);
+                expect(urlObjects.length).to.not.equal(0);
+                cy.task("log",`LINK COUNT: ${urlObjects.length}`);
             });
         })
 
@@ -116,21 +116,20 @@ describe('Check all application links.', () => {
             }
         })
 
-        // VENTURE-STUDIO page tests.
-        describe("VENTURE-STUDIO page tests", () => {
-            let testType = "VENTURE-STUDIO"
-            for (let i :number = 0; i < ventureStudioPageSampleSize; i++) {
-                it(`Checking ${testType} page: ${i}`, () => {
-                    const urlObject :companyUrlObject = ventureStudioUrlObjects[i];
+        // VENTURE-STUDIO page tests. - As of June, 2023, there seem to be no more venture-studio links.
+        // describe("VENTURE-STUDIO page tests", () => {
+        //     let testType = "VENTURE-STUDIO"
+        //     for (let i :number = 0; i < ventureStudioPageSampleSize; i++) {
+        //         it(`Checking ${testType} page: ${i}`, () => {
+        //             const urlObject :companyUrlObject = ventureStudioUrlObjects[i];
 
-                    if (urlObject) {
-                        cy.log(`${testType} NAME: ${urlObject.companyName}`);
-                    }
-
-                    cy.VerifyApplyButtonWorks(urlObject);
-                })
-            }
-        })
+        //             if (urlObject) {
+        //                 cy.log(`${testType} NAME: ${urlObject.companyName}`);
+        //                 cy.VerifyApplyButtonWorks(urlObject);
+        //             }
+        //         })
+        //     }
+        // })
 
         // PREMIER PARTNER page tests.
         describe("PREMIER PARTNER page tests", () => {
@@ -141,15 +140,14 @@ describe('Check all application links.', () => {
 
                     if (urlObject) {
                         cy.log(`${testType} URL: ${urlObject.url}`);
+                        cy.VerifyApplyButtonWorks(urlObject);
                     }
-
-                    cy.VerifyApplyButtonWorks(urlObject);
                 })
             }
         })
+        
     } else {
         cy.log("ERROR - baseUrl not defined.");
-        // skipOn(!_targetUrlObject)
     }
 })
 

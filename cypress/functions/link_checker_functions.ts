@@ -15,7 +15,8 @@ export async function GetUpdatedUrlList(_baseUrl :string|null = "https://www.vou
     if (_baseUrl) {
         const xmlUrl :string = `${_baseUrl}/sitemap.xml`;
         const outerRegex :RegExp = /<\/?url>/;
-        const urlRegex :RegExp = /^\s*<loc>(.+)<\/loc>\s*$/;
+        // const urlRegex :RegExp = /^\s*<loc>(.+)<\/loc>\s*/;
+        const urlRegex: RegExp = /href="(.+)"/
         const whitespaceRegex :RegExp = /^\s*$/;
 
         // Get the text from the xmlUrl.
@@ -30,7 +31,7 @@ export async function GetUpdatedUrlList(_baseUrl :string|null = "https://www.vou
 
         // Convert the urlList to just a list of the urls. (Removes all other text.)
         const urlListStartingLength :number = urlList.length;
-        for (let i :number = urlListStartingLength; i >= 0; i--) {
+        for (let i :number = urlListStartingLength - 1; i >= 0; i--) {
             const ithItem :string = urlList[i];
 
             // Remove undefined/emptyString items.
@@ -48,8 +49,16 @@ export async function GetUpdatedUrlList(_baseUrl :string|null = "https://www.vou
 
                 // Delete items that produce no matches to the urlRegex.
                 if (regexMatchArray === null) {
+                    //testing
+                    cy.task("log",`${i}thItem: ${ithItem}`);
+
                     urlList.splice(i,1);
                     continue;
+                }
+
+                //testing
+                if (i === 51) {
+                    cy.task("log",`!! -- ${ithItem}`)
                 }
 
                 // Overwrite the ith item with its URL.
