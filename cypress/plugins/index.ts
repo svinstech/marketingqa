@@ -19,6 +19,13 @@
 module.exports = (on:any, config:any) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
+  on('task', {
+    log(message:string) {
+      console.log(message)
+      return null
+    },
+  })
+
   return require('@cypress/grep/src/plugin')(config);
 }
 
