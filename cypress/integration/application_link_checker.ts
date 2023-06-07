@@ -53,7 +53,7 @@ describe('Check all application links.', () => {
         before('Gather URLs', () => {
             cy.wait(1).then(async () => {
                 urlObjects = await GetUpdatedUrlList(baseUrl);
-                expect(urlObjects.length).to.not.equal(0);
+                expect(urlObjects.length).to.not.equal(0); // fails here
                 cy.log(`LINK COUNT: ${urlObjects.length}`);
             });
         })
