@@ -18,7 +18,7 @@ When the tests finish running, the status of the CircleCI build will be conveyed
 If you'd like to execute the test script manually:
 -Open a terminal
 -Navigate to the root of this project
--Run *npx cypress open* to open Cypress
+-Run *yarn cypress open* to open Cypress
 -In Cypress, click *integration/application_link_checker.ts* to start the tests.
 
 
@@ -28,5 +28,5 @@ When an update is made to any pages under the Vouch.us domain, we must ensure th
 ## Who was involved?
 It was originally requested by Gabe Tiger in 2022. 
 The work was started by Jason McFarland in 2022. 
-The work was finished by Kellen Kincaid 2023.
+The work was finished and is maintained by Kellen Kincaid (2023-present).
 
