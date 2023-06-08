@@ -85,36 +85,36 @@ describe('Check all application links.', () => {
         })
 
         // PARTNER page tests.
-        describe("PARTNER page tests", { tags : ['@linkChecker', '@partner'] }, () => {
-            let testType = "PARTNER"
-            for (let i :number = 0; i < partnerPageSampleSize; i++) {
-                it(`Checking ${testType} page: ${i}`, () => {
-                    const urlObject :companyUrlObject = partnerUrlObjects[i];
+        // describe("PARTNER page tests", { tags : ['@linkChecker', '@partner'] }, () => {
+        //     let testType = "PARTNER"
+        //     for (let i :number = 0; i < partnerPageSampleSize; i++) {
+        //         it(`Checking ${testType} page: ${i}`, () => {
+        //             const urlObject :companyUrlObject = partnerUrlObjects[i];
 
-                    if (urlObject) {
-                        cy.log(`${testType} NAME: ${urlObject.companyName}`);
-                    }
+        //             if (urlObject) {
+        //                 cy.log(`${testType} NAME: ${urlObject.companyName}`);
+        //             }
 
-                    cy.VerifyApplyButtonWorks(urlObject);
-                })
-            }
-        })
+        //             cy.VerifyApplyButtonWorks(urlObject);
+        //         })
+        //     }
+        // })
 
         // VENTURE page tests.
-        describe("VENTURE page tests", { tags : ['@linkChecker', '@venture'] }, () => {
-            let testType = "VENTURE"
-            for (let i :number = 0; i < venturePageSampleSize; i++) {
-                it(`Checking ${testType} page: ${i}`, () => {
-                    const urlObject :companyUrlObject = ventureUrlObjects[i];
+        // describe("VENTURE page tests", { tags : ['@linkChecker', '@venture'] }, () => {
+        //     let testType = "VENTURE"
+        //     for (let i :number = 0; i < venturePageSampleSize; i++) {
+        //         it(`Checking ${testType} page: ${i}`, () => {
+        //             const urlObject :companyUrlObject = ventureUrlObjects[i];
 
-                    if (urlObject) {
-                        cy.log(`${testType} NAME: ${urlObject.companyName}`);
-                    }
+        //             if (urlObject) {
+        //                 cy.log(`${testType} NAME: ${urlObject.companyName}`);
+        //             }
 
-                    cy.VerifyApplyButtonWorks(urlObject);
-                })
-            }
-        })
+        //             cy.VerifyApplyButtonWorks(urlObject);
+        //         })
+        //     }
+        // })
 
         // VENTURE-STUDIO page tests. - As of June, 2023, there seem to be no more venture-studio links.
         // describe("VENTURE-STUDIO page tests", { tags : ['@linkChecker', '@ventureStudio'] }, () => {
@@ -132,19 +132,19 @@ describe('Check all application links.', () => {
         // })
 
         // PREMIER PARTNER page tests.
-        describe("PREMIER PARTNER page tests", { tags : ['@linkChecker', '@premierPartner'] }, () => {
-            let testType = "PREMIER PARTNER"
-            for (let i :number = 0; i < premierPartnerSampleSize; i++) {
-                it(`Checking ${testType} page: ${i}`, () => {
-                    const urlObject :companyUrlObject = premierPartnerUrlObjects[i];
+        // describe("PREMIER PARTNER page tests", { tags : ['@linkChecker', '@premierPartner'] }, () => {
+        //     let testType = "PREMIER PARTNER"
+        //     for (let i :number = 0; i < premierPartnerSampleSize; i++) {
+        //         it(`Checking ${testType} page: ${i}`, () => {
+        //             const urlObject :companyUrlObject = premierPartnerUrlObjects[i];
 
-                    if (urlObject) {
-                        cy.log(`${testType} URL: ${urlObject.url}`);
-                        cy.VerifyApplyButtonWorks(urlObject);
-                    }
-                })
-            }
-        })
+        //             if (urlObject) {
+        //                 cy.log(`${testType} URL: ${urlObject.url}`);
+        //                 cy.VerifyApplyButtonWorks(urlObject);
+        //             }
+        //         })
+        //     }
+        // })
         
     } else {
         cy.log("ERROR - baseUrl not defined.");

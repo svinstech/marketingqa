@@ -173,6 +173,10 @@ elif [ "${SLACK_BUILD_STATUS}" != "success" && ${ORIGINATING_BRANCH} != "master"
             }" "${SLACK_FAILURE_WEBHOOK}"
   JOB_STATUS="Job failed. Alert sent."
 else
+  echo "${SLACK_BUILD_STATUS}" != "success"
+  echo "${ORIGINATING_BRANCH}" != "master"
+  echo "${SLACK_UID}" != "!here"
+
   JOB_STATUS="Job failed. Alert not sent."
 fi
 
