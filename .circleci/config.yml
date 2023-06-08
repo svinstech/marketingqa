@@ -32,7 +32,6 @@ qa-workflow: &qa-workflow
         package-manager: yarn
         cypress-command: 'yarn cypress run --browser chrome'
         name: "MarketingQA Publish_Site Tests"
-        spec: ./cypress/integration/*
         post-steps:
           - slack-reporter
 
