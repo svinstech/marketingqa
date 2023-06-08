@@ -87,7 +87,7 @@ describe('Check all application links.', () => {
         // PARTNER page tests.
         describe("PARTNER page tests", { tags : ['@linkChecker', '@partner'] }, () => {
             let testType = "PARTNER"
-            for (let i :number = 0; i < 1/*partnerPageSampleSize*/; i++) {
+            for (let i :number = 0; i < partnerPageSampleSize; i++) {
                 it(`Checking ${testType} page: ${i}`, () => {
                     const urlObject :companyUrlObject = partnerUrlObjects[i];
 
