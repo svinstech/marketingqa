@@ -5,7 +5,7 @@ orbs:
 executors:
   with-chrome:
     docker:
-      - image: 'cypress/browsers:node16.16.0-chrome107-ff107'
+      - image: 'cypress/browsers:latest'
 #          CYPRESS_viewport: macbook-15
 #          CYPRESS_takeScreenshots: true
 #          CYPRESS_RECORD_KEY: bcc83a31-a9da-4c87-98e9-f023d062e90d
