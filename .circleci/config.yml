@@ -28,7 +28,6 @@ commands:
 qa-workflow: &qa-workflow
   jobs:
     - cypress/run:
-        cypress-command: npx cypress run --browser chrome #--env grepTags=@linkChecker    (an example of use a tag)
         install-browsers: true # Installs Chrome & Firefox at runtime
         package-manager: yarn
         cypress-command: 'yarn cypress run --browser chrome'
