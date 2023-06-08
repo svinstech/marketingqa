@@ -28,7 +28,7 @@ commands:
 qa-workflow: &qa-workflow
   jobs:
     - cypress/run:
-        install-browsers: true # Installs Chrome & Firefox at runtime
+        # install-browsers: true # Installs Chrome & Firefox at runtime
         package-manager: yarn
         cypress-command: 'yarn cypress run --browser chrome'
         name: "MarketingQA Publish_Site Tests"
