@@ -30,7 +30,7 @@ qa-workflow: &qa-workflow
     - cypress/run:
         # install-browsers: true # Installs Chrome & Firefox at runtime
         package-manager: yarn
-        cypress-command: 'yarn cypress run --parallel'
+        cypress-command: 'yarn cypress run --parallel --record'
         parallelism: 3
         name: "MarketingQA Publish_Site Tests"
         post-steps:
