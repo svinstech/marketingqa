@@ -147,7 +147,7 @@ if [ "${SLACK_BUILD_STATUS}" = "success" ]; then
             }" "${SLACK_SUCCESS_WEBHOOK}"
   JOB_STATUS="Job completed successfully. Alert sent."
 
-elif [ "${SLACK_BUILD_STATUS}" != "success" && ${ORIGINATING_BRANCH} != "master" && "${SLACK_UID}" != "!here" ]; then
+elif [ "${SLACK_BUILD_STATUS}" != "success" ] && [ "${ORIGINATING_BRANCH}" != "master" ] && [ "${SLACK_UID}" != "!here" ]; then
   FAILURE_MESSAGE_CHANNEL="${SLACK_UID}"
   curl -X POST -H 'Content-type: application/json' \
     --data "{ \
