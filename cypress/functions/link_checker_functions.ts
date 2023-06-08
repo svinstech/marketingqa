@@ -49,16 +49,8 @@ export async function GetUpdatedUrlList(_baseUrl :string|null = "https://www.vou
 
                 // Delete items that produce no matches to the urlRegex.
                 if (regexMatchArray === null) {
-                    //testing
-                    cy.task("log",`${i}thItem: ${ithItem}`);
-
                     urlList.splice(i,1);
                     continue;
-                }
-
-                //testing
-                if (i === 51) {
-                    cy.task("log",`!! -- ${ithItem}`)
                 }
 
                 // Overwrite the ith item with its URL.
