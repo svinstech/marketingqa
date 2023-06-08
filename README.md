@@ -21,6 +21,11 @@ If you'd like to execute the test script manually:
 -Run *yarn cypress open* to open Cypress
 -In Cypress, click *integration/application_link_checker.ts* to start the tests.
 
+To run the tests in the terminal, run:
+-yarn run test
+
+There are more options listed in the scripts section of package.json.
+
 
 ## Why do we need this?
 When an update is made to any pages under the Vouch.us domain, we must ensure that this update didn't break any of our application links. Doing this manually would be too time-consuming, so we have automated that process.

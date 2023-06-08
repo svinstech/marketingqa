@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "yarn cypress run --browser chrome",
+    "test:partner": "yarn cypress run --browser chrome --env grepTags=\"@partner\"",
+    "test:venture": "yarn cypress run --browser chrome --env grepTags=\"@venture\"",
+    "test:premierPartner": "yarn cypress run --browser chrome --env grepTags=\"@premierPartner\""
   },
   "repository": {
     "type": "git",
