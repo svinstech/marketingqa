@@ -116,20 +116,21 @@ describe('Check all application links.', () => {
             }
         })
 
-        // VENTURE-STUDIO page tests. - As of June, 2023, there seem to be no more venture-studio links.
-        describe("VENTURE-STUDIO page tests", { tags : ['@linkChecker', '@ventureStudio'] }, () => {
-            let testType = "VENTURE-STUDIO"
-            for (let i :number = 0; i < ventureStudioPageSampleSize; i++) {
-                it(`Checking ${testType} page: ${i}`, () => {
-                    const urlObject :companyUrlObject = ventureStudioUrlObjects[i];
+        ///// NOTE ///// - As of June, 2023, there seem to be no more venture-studio links.
+        // VENTURE-STUDIO page tests.
+        // describe("VENTURE-STUDIO page tests", { tags : ['@linkChecker', '@ventureStudio'] }, () => {
+        //     let testType = "VENTURE-STUDIO"
+        //     for (let i :number = 0; i < ventureStudioPageSampleSize; i++) {
+        //         it(`Checking ${testType} page: ${i}`, () => {
+        //             const urlObject :companyUrlObject = ventureStudioUrlObjects[i];
 
-                    if (urlObject) {
-                        cy.log(`${testType} NAME: ${urlObject.companyName}`);
-                        cy.VerifyApplyButtonWorks(urlObject);
-                    }
-                })
-            }
-        })
+        //             if (urlObject) {
+        //                 cy.log(`${testType} NAME: ${urlObject.companyName}`);
+        //                 cy.VerifyApplyButtonWorks(urlObject);
+        //             }
+        //         })
+        //     }
+        // })
 
         // PREMIER PARTNER page tests.
         describe("PREMIER PARTNER page tests", { tags : ['@linkChecker', '@premierPartner'] }, () => {
