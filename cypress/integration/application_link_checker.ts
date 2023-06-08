@@ -48,7 +48,7 @@ for (let i :number = 0; i < premierPartnerPagesKeys.length; i++) {
 ///////////////////////
 //////// TESTS ////////
 ///////////////////////
-describe('Check all application links.', () => {
+describe('Check application links.', () => {
     if (baseUrl) {
         before('Gather URLs', () => {
             cy.wait(1).then(async () => {
@@ -83,6 +83,10 @@ describe('Check all application links.', () => {
             })
             
         })
+
+        beforeEach(() => {
+            cy.clearCookies();
+        });
 
         // PARTNER page tests.
         describe("PARTNER page tests", { tags : ['@linkChecker', '@partner'] }, () => {
