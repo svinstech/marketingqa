@@ -85,20 +85,21 @@ describe('Check all application links.', () => {
         })
 
         // PARTNER page tests.
-        // describe("PARTNER page tests", { tags : ['@linkChecker', '@partner'] }, () => {
-        //     let testType = "PARTNER"
-        //     for (let i :number = 0; i < partnerPageSampleSize; i++) {
-        //         it(`Checking ${testType} page: ${i}`, () => {
-        //             const urlObject :companyUrlObject = partnerUrlObjects[i];
+        describe("PARTNER page tests", { tags : ['@linkChecker', '@partner'] }, () => {
+            let testType = "PARTNER"
+            for (let i :number = 0; i < 1/*partnerPageSampleSize*/; i++) {
+                it(`Checking ${testType} page: ${i}`, () => {
+                    const urlObject :companyUrlObject = partnerUrlObjects[i];
 
-        //             if (urlObject) {
-        //                 cy.log(`${testType} NAME: ${urlObject.companyName}`);
-        //             }
+                    if (urlObject) {
+                        cy.log(`${testType} NAME: ${urlObject.companyName}`);
+                    }
 
-        //             cy.VerifyApplyButtonWorks(urlObject);
-        //         })
-        //     }
-        // })
+                    cy.url().should('contain', "elvis is awesome");
+                    // cy.VerifyApplyButtonWorks(urlObject);
+                })
+            }
+        })
 
         // VENTURE page tests.
         // describe("VENTURE page tests", { tags : ['@linkChecker', '@venture'] }, () => {
