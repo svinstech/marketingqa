@@ -4,7 +4,6 @@
     We use cy.wait(1).then(async () => {...} to execute Node code within Cypress contexts.
     This is only done in Before() steps to populate certain variables (for example, the urlObjects array).
 */
-import { skipOn } from '@cypress/skip-test'
 import premierPartnerPages from "../configs/url_premier_partner.json";
 const shuffle :any = require('shuffle-array');
 const baseUrl :string|null = Cypress.config('baseUrl')
@@ -49,13 +48,13 @@ for (let i :number = 0; i < premierPartnerPagesKeys.length; i++) {
 ///////////////////////
 //////// TESTS ////////
 ///////////////////////
-describe('Check all application links.', () => {
+describe('Check application links.', () => {
     if (baseUrl) {
         before('Gather URLs', () => {
             cy.wait(1).then(async () => {
                 urlObjects = await GetUpdatedUrlList(baseUrl);
                 expect(urlObjects.length).to.not.equal(0);
-                cy.log(`LINK COUNT: ${urlObjects.length}`);
+                cy.task("log",`LINK COUNT: ${urlObjects.length}`);
             });
         })
 
@@ -85,64 +84,75 @@ describe('Check all application links.', () => {
             
         })
 
+        beforeEach(() => {
+            cy.clearCookies();
+        });
+
         // PARTNER page tests.
-        let testType = "PARTNER"
-        for (let i :number = 0; i < partnerPageSampleSize; i++) {
-            it(`Checking ${testType} page: ${i}`, () => {
-                const urlObject :companyUrlObject = partnerUrlObjects[i];
+        describe("PARTNER page tests", { tags : ['@linkChecker', '@partner'] }, () => {
+            let testType = "PARTNER"
+            for (let i :number = 0; i < partnerPageSampleSize; i++) {
+                it(`Checking ${testType} page: ${i}`, () => {
+                    const urlObject :companyUrlObject = partnerUrlObjects[i];
 
-                if (urlObject) {
-                    cy.log(`${testType} NAME: ${urlObject.companyName}`);
-                }
+                    if (urlObject) {
+                        cy.log(`${testType} NAME: ${urlObject.companyName}`);
+                    }
 
-                cy.VerifyApplyButtonWorks(urlObject);
-            })
-        }
+                    cy.VerifyApplyButtonWorks(urlObject);
+                })
+            }
+        })
 
         // VENTURE page tests.
-        testType = "VENTURE"
-        for (let i :number = 0; i < venturePageSampleSize; i++) {
-            it(`Checking ${testType} page: ${i}`, () => {
-                const urlObject :companyUrlObject = ventureUrlObjects[i];
+        describe("VENTURE page tests", { tags : ['@linkChecker', '@venture'] }, () => {
+            let testType = "VENTURE"
+            for (let i :number = 0; i < venturePageSampleSize; i++) {
+                it(`Checking ${testType} page: ${i}`, () => {
+                    const urlObject :companyUrlObject = ventureUrlObjects[i];
 
-                if (urlObject) {
-                    cy.log(`${testType} NAME: ${urlObject.companyName}`);
-                }
+                    if (urlObject) {
+                        cy.log(`${testType} NAME: ${urlObject.companyName}`);
+                    }
 
-                cy.VerifyApplyButtonWorks(urlObject);
-            })
-        }
+                    cy.VerifyApplyButtonWorks(urlObject);
+                })
+            }
+        })
 
+        ///// NOTE ///// - As of June, 2023, there seem to be no more venture-studio links.
         // VENTURE-STUDIO page tests.
-        testType = "VENTURE-STUDIO"
-        for (let i :number = 0; i < ventureStudioPageSampleSize; i++) {
-            it(`Checking ${testType} page: ${i}`, () => {
-                const urlObject :companyUrlObject = ventureStudioUrlObjects[i];
+        // describe("VENTURE-STUDIO page tests", { tags : ['@linkChecker', '@ventureStudio'] }, () => {
+        //     let testType = "VENTURE-STUDIO"
+        //     for (let i :number = 0; i < ventureStudioPageSampleSize; i++) {
+        //         it(`Checking ${testType} page: ${i}`, () => {
+        //             const urlObject :companyUrlObject = ventureStudioUrlObjects[i];
 
-                if (urlObject) {
-                    cy.log(`${testType} NAME: ${urlObject.companyName}`);
-                }
-
-                cy.VerifyApplyButtonWorks(urlObject);
-            })
-        }
+        //             if (urlObject) {
+        //                 cy.log(`${testType} NAME: ${urlObject.companyName}`);
+        //                 cy.VerifyApplyButtonWorks(urlObject);
+        //             }
+        //         })
+        //     }
+        // })
 
         // PREMIER PARTNER page tests.
-        testType = "PREMIER PARTNER"
-        for (let i :number = 0; i < premierPartnerSampleSize; i++) {
-            it(`Checking ${testType} page: ${i}`, () => {
-                const urlObject :companyUrlObject = premierPartnerUrlObjects[i];
+        describe("PREMIER PARTNER page tests", { tags : ['@linkChecker', '@premierPartner'] }, () => {
+            let testType = "PREMIER PARTNER"
+            for (let i :number = 0; i < premierPartnerSampleSize; i++) {
+                it(`Checking ${testType} page: ${i}`, () => {
+                    const urlObject :companyUrlObject = premierPartnerUrlObjects[i];
 
-                if (urlObject) {
-                    cy.log(`${testType} URL: ${urlObject.url}`);
-                }
-
-                cy.VerifyApplyButtonWorks(urlObject);
-            })
-        }
+                    if (urlObject) {
+                        cy.log(`${testType} URL: ${urlObject.url}`);
+                        cy.VerifyApplyButtonWorks(urlObject);
+                    }
+                })
+            }
+        })
+        
     } else {
         cy.log("ERROR - baseUrl not defined.");
-        // skipOn(!_targetUrlObject)
     }
 })
 

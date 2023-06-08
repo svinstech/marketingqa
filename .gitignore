@@ -7,6 +7,8 @@ node_modules
 /tests/e2e/specs/sandbox/
 
 /cypress/reports
+/cypress/screenshots
+/cypress/downloads
 
 # local env files
 .env

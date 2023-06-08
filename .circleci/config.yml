@@ -1,15 +1,8 @@
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@1
+  cypress: cypress-io/cypress@3
 
-executors:
-  with-chrome:
-    docker:
-      - image: 'cypress/browsers:node16.16.0-chrome107-ff107'
-#          CYPRESS_viewport: macbook-15
-#          CYPRESS_takeScreenshots: true
-#          CYPRESS_RECORD_KEY: bcc83a31-a9da-4c87-98e9-f023d062e90d
-#          CYPRESS_RETRIES: 3
+executor: cypress/default
 
 commands:
   slack-reporter:
@@ -34,16 +27,11 @@ commands:
 
 qa-workflow: &qa-workflow
   jobs:
-#    - cypress/install:
     - cypress/run:
-#        requires:
-#          - cypress/install
+        # install-browsers: true # Installs Chrome & Firefox at runtime
+        package-manager: yarn
+        cypress-command: 'yarn cypress run'
         name: "MarketingQA Publish_Site Tests"
-#        executor: with-chrome
-#        browser: chrome
-        spec: ./cypress/integration/*
-        no-workspace: true
-        yarn: true
         post-steps:
           - slack-reporter
 

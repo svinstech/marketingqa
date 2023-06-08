@@ -47,10 +47,10 @@ import { companyUrlObject } from "../interfaces/link_checker_interfaces";
 */
 Cypress.Commands.add('ValidateApplicationPage', (_targetUrlObject :companyUrlObject, _returnToOriginalUrl :boolean = true) => {
     // Ensure that the resulting URL has the correct domain.
-    const vouchApplyDomain :string = 'https://app.vouch.us/';
-    cy.url().should('contain', vouchApplyDomain);
+    const vouchApplyDomain :string = 'https://apply.vouch.us/';
+    cy.url({ timeout: 60000 * 2 }).should('contain', vouchApplyDomain);
 
-    // Ensure that the resulting URL has the correct partenr slug.
+    // Ensure that the resulting URL has the correct partner slug.
     cy.url().then(_url => {
         const urlPartnerSlug :string = `partner=${_targetUrlObject.companyName}`;
 
@@ -61,7 +61,7 @@ Cypress.Commands.add('ValidateApplicationPage', (_targetUrlObject :companyUrlObj
             cy.log(`ACTUAL URL: ${_url}`);
         }
 
-        cy.wrap(_url).should('contain', urlPartnerSlug);
+        cy.wrap(_url, { timeout: 60000 * 2 }).should('contain', urlPartnerSlug);
     })
 
     if (_returnToOriginalUrl) {
@@ -91,7 +91,7 @@ Cypress.Commands.add('VerifyApplyButtonWorks', (_targetUrlObject :companyUrlObje
 
         /*
             According to Gabe Tiger, the 'apply-trigger' class is supposed to ONLY be on the links that lead to pages
-                with the app.vouch.us domain.
+                with the apply.vouch.us (formerly app.vouch.us) domain.
             If you find that a link has this class and does not lead to that domain, OR a link leads to that domain
                 and does not have that class, then it is likely a bug.
         */
@@ -120,7 +120,7 @@ Cypress.Commands.add('VerifyApplyButtonWorks', (_targetUrlObject :companyUrlObje
                         /*
                             If clicking the application link takes us to the vouch.us/getstarted page,
                                 then we must click the application link on that page to finally reach
-                                the app.vouch.us/...
+                                the apply.vouch.us/...
                         */
                         cy.get(applyLinkSelector).then(($elements_getStartedPage :JQuery<HTMLElement>) => {
                             const applyLinkCount_getStartedPage :number = $elements_getStartedPage.length;
@@ -145,7 +145,6 @@ Cypress.Commands.add('VerifyApplyButtonWorks', (_targetUrlObject :companyUrlObje
         })
     } else { 
         cy.log(`Url object is undefined.`);
-        // skipOn(!_targetUrlObject)
     }
 })
 

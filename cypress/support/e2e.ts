@@ -25,3 +25,5 @@ import "./commands";
 //   // failing the test
 //   return false;
 // });
+const registerCypressGrep = require('@cypress/grep');
+registerCypressGrep();
