@@ -84,7 +84,7 @@ Cypress.Commands.add('ValidateApplicationPage', (_targetUrlObject :companyUrlObj
 Cypress.Commands.add('VerifyApplyButtonWorks', (_targetUrlObject :companyUrlObject|undefined) => {
     if (_targetUrlObject) {
         // Go to the target URL.
-        cy.visit(_targetUrlObject.url);
+        cy.visit(_targetUrlObject.url, {timeout: 120000});
 
         // Returning false here prevents Cypress from failing the test on uncaught exceptions.
         Cypress.on('uncaught:exception', () => { return false })
@@ -138,13 +138,13 @@ Cypress.Commands.add('VerifyApplyButtonWorks', (_targetUrlObject :companyUrlObje
                         ///// !END!   vouch.us/getstarted edge case   !END! /////
                     } else {
                         const currentlyOnTheDefaultApplyPage = _url === "https://apply.vouch.us/";
-                        
+
                         if (currentlyOnTheDefaultApplyPage) {
                             //testing
                             cy.task("log", "TESTING - TARGET ACQUIRED");
                             
                             // Go back to the previous URL and click the application button again. (Hopefully it works this time.)
-                            cy.visit(_targetUrlObject.url);
+                            cy.visit(_targetUrlObject.url, {timeout: 120000});
                             cy.get(applyLinkSelector)
                                 .eq(i).click();
                         }
