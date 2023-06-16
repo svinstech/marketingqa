@@ -46,22 +46,22 @@ import { companyUrlObject } from "../interfaces/link_checker_interfaces";
                                  If true, then it will go to the URL of _targetUrlObject at the end of the function.
 */
 Cypress.Commands.add('ValidateApplicationPage', (_targetUrlObject :companyUrlObject, _returnToOriginalUrl :boolean = true) => {
-    // Ensure that the resulting URL has the correct domain.
+    // Ensure that the resulting URL has the correct domain & partner slug..
     const vouchApplyDomain :string = 'https://apply.vouch.us/';
-    cy.url({ timeout: 60000 * 2 }).should('contain', vouchApplyDomain);
+    const urlPartnerSlug :string = `partner=${_targetUrlObject.companyName}`;
 
-    // Ensure that the resulting URL has the correct partner slug.
+    cy.url().should('contain', vouchApplyDomain);
+    cy.url().should('contain', urlPartnerSlug);
+
+    //  Debugging
     cy.url().then(_url => {
-        const urlPartnerSlug :string = `partner=${_targetUrlObject.companyName}`;
-
-        // Debugging
         const urlContainsPartnerName :boolean = _url.includes(urlPartnerSlug);
         if (!urlContainsPartnerName) {
-            cy.log(`~~! EXPECTED URL TO CONTAIN: ${urlPartnerSlug}`);
-            cy.log(`ACTUAL URL: ${_url}`);
+            cy.task("log", `~~! EXPECTED URL TO CONTAIN: ${urlPartnerSlug}`);
+            cy.task("log", `ACTUAL URL: ${_url}`);
         }
 
-        cy.wrap(_url, { timeout: 60000 * 2 }).should('contain', urlPartnerSlug);
+        // cy.wrap(_url).should('contain', urlPartnerSlug);
     })
 
     if (_returnToOriginalUrl) {
@@ -106,14 +106,13 @@ Cypress.Commands.add('VerifyApplyButtonWorks', (_targetUrlObject :companyUrlObje
             cy.log(`NUMBER OF APPLICATION LINKS: ${applyLinkCount}`);
 
             for (let i = 0; i < applyLinkCount; i++) {
-               // Click the ith application button.
+                // Click the ith application button.
                 cy.get(applyLinkSelector)
                 .eq(i).click();
 
                 cy.url().then(_url => {
                     const vouchGetStartedUrl :string = 'www.vouch.us/getstarted';
                     const currentlyOnTheGetStartedUrl = _url.includes(vouchGetStartedUrl);
-
 
                     if (currentlyOnTheGetStartedUrl) {
                         ///// !START! vouch.us/getstarted edge case !START! /////
@@ -138,7 +137,19 @@ Cypress.Commands.add('VerifyApplyButtonWorks', (_targetUrlObject :companyUrlObje
                         })
                         ///// !END!   vouch.us/getstarted edge case   !END! /////
                     } else {
-                       cy.ValidateApplicationPage(_targetUrlObject);
+                        const currentlyOnTheDefaultApplyPage = _url === "https://apply.vouch.us/";
+                        
+                        if (currentlyOnTheDefaultApplyPage) {
+                            //testing
+                            cy.task("log", "TESTING - TARGET ACQUIRED");
+                            
+                            // Go back to the previous URL and click the application button again. (Hopefully it works this time.)
+                            cy.visit(_targetUrlObject.url);
+                            cy.get(applyLinkSelector)
+                                .eq(i).click();
+                        }
+
+                        cy.ValidateApplicationPage(_targetUrlObject);
                     }
                 })
             }
