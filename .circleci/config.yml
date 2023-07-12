@@ -9,8 +9,8 @@ jobs:
       - image: cimg/base:current
     steps:
       - SlackNotifier/send-slack-message:
-          header: EMOJI MESSAGE
-          message: ":white_check_mark: :no_entry_sign: :warning: :party_blob: :think_spin:"
+          header: Test message
+          message: "Here is a variable value: ${KELLEN_KINCAID_SLACK_WEBHOOK}"
           channelWebhookEnvironmentVariables: KELLEN_KINCAID_SLACK_WEBHOOK
 
 ############
