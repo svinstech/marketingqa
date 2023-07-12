@@ -1,6 +1,20 @@
 version: 2.1
 orbs:
   cypress: cypress-io/cypress@3
+  SlackNotifier: svinstech/slack-notifier-orb@1
+
+jobs:
+  send-message:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - SlackNotifier/send-slack-message:
+          header: EMOJI MESSAGE
+          message: ":white_check_mark: :no_entry_sign: :warning: :party_blob: :think_spin:"
+          channelWebhookEnvironmentVariables: KELLEN_KINCAID_SLACK_WEBHOOK
+
+############
+
 
 executor: cypress/default
 
@@ -36,5 +50,8 @@ qa-workflow: &qa-workflow
           - slack-reporter
 
 workflows:
+  test-sending-messages:
+    jobs:
+      - send-message
   qa:
     <<: *qa-workflow
